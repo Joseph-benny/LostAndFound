@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Report Found Item</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="signup.html">Sign Up</a>
+         <a href="about.html">About Us</a>
+  </nav>
+  <header>
+    <h1>Lost&nbsp;&nbsp; And &nbsp;&nbsp;Found</h1>
+    </header>
+    <h2 class="c1">Search Items</h2>
+     <div class="search-container">
+    <input type="text" placeholder="Search..." class="search-input">
+    <button class="search-button">Search</button>
+  </div>
+  <h2 class="c2">View Items</h2>
+  
+
+<div class="dropdown">
+  <button onclick="toggleDropdown()" class="dropbtn">Report an Item ▼</button>
+  <div id="dropdownMenu" class="dropdown-content">
+    <form action="lost.html" method="get">
+      <input type="submit" value="Report Lost Item">
+    </form>
+    <form action="found.html" method="get">
+      <input type="submit" value="Report Found Item">
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleDropdown() {
+    document.getElementById("dropdownMenu").classList.toggle("show");
+  }
+
+  // Optional: close dropdown when clicking outside
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      const dropdowns = document.getElementsByClassName("dropdown-content");
+      for (let i = 0; i < dropdowns.length; i++) {
+        const openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  };
+</script>
+
+</body>
+</html>
+   

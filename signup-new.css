@@ -1,0 +1,104 @@
+/* Reset */
+* {
+
+  
+}
+
+/* Body */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  
+}
+
+.navbar {
+  background-color: #4285f4;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  position: fixed;
+  top:3px;
+  width:90%;
+  border-radius: 50px;
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Outer container */
+.main-card {
+  width: 350px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  background-color: #2f76f3;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+/* Login box */
+.login-box {
+  padding: 30px 25px;
+}
+
+/* Login title */
+.login-box h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+/* Labels */
+.label {
+  display: block;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Button */
+button {
+  width: 50%;
+  margin-left: 70px;
+  padding: 12px;
+  background-color: #2f76f3;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #155ed9;
+}

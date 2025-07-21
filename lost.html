@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Report Lost Item</title>
+  <link rel="stylesheet" href="lost.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <a href="signup.html">Sign Up</a>
+    <a href="home.html">Home</a>
+     <a href="about.html">About Us</a>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-container">
+    <form action="found_process.php" method="post" class="report-form">
+      <div class="form-title">Report Lost Item</div>
+
+      <input type="text" name="lost_item" placeholder="lost Item" required>
+      <input type="text" name="lost_location" placeholder="lostlocation" required>
+
+      <label for="description" class="desc-label">Add description</label>
+      <textarea name="description" id="description" rows="4" placeholder="Enter your description here. Add your phone number also." required></textarea>
+
+      <button type="submit" class="submit-btn">Submit Report</button>
+    </form>
+  </div>
+
+</body>
+</html>

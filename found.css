@@ -1,0 +1,91 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
+
+/* Navigation bar */
+.navbar {
+  background-color: #4285f4;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Form container */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+/* Report form */
+.report-form {
+  width: 350px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Title */
+.form-title {
+  background-color: #4285f4;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 15px;
+}
+
+/* Inputs */
+.report-form input[type="text"],
+.report-form textarea {
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: block;
+  font-size: 14px;
+}
+
+.desc-label {
+  display: block;
+  margin-top: 10px;
+  font-weight: normal;
+  color: #333;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 90%;
+  background-color: #006400;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  margin: 15px auto;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #004d00;
+}
