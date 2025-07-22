@@ -25,7 +25,9 @@ $sql = "INSERT INTO users (user_id,first_name, last_name, phone, email, password
         VALUES ('$user_id','$first_name', '$last_name', '$phone', '$email', '$password')";
 
 if ($conn->query($sql) === TRUE) {
-  echo "Registration successful!";
+  //echo "Registration successful!";
+   header("Location:dashboard.html");
+  exit;
 } else {
   echo "Error: " . $sql . "<br>" . $conn->error;
 }
