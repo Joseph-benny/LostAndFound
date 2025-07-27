@@ -26,11 +26,13 @@ $sql = "INSERT INTO users (user_id,first_name, last_name, phone, email, password
 
 if ($conn->query($sql) === TRUE) {
   //echo "Registration successful!";
-   header("Location:dashboard.html");
+   header("Location:home.php");
   exit;
 } else {
   echo "Error: " . $sql . "<br>" . $conn->error;
 }
+session_start();
+$_SESSION['user_id'] = $row['user_id'];
 
 $conn->close();
 ?>

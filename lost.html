@@ -10,20 +10,27 @@
   <!-- Navigation Bar -->
   <div class="navbar">
     <a href="signup.html">Sign Up</a>
-    <a href="home.html">Home</a>
+    <a href="home.php">Home</a>
      <a href="about.html">About Us</a>
+     <a href="contact.html">Contact Us</a>
+       <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
   </div>
 
   <!-- Form Card -->
   <div class="form-container">
-    <form action="found_process.php" method="post" class="report-form">
+    <form action="lost_process.php" method="POST" class="report-form">
       <div class="form-title">Report Lost Item</div>
 
-      <input type="text" name="lost_item" placeholder="lost Item" required>
+      <input type="text" name="lost_item" placeholder="Item name" required>
       <input type="text" name="lost_location" placeholder="lostlocation" required>
+
+      <input type="date" name="date_lost" placeholder="Enter Date" required>
 
       <label for="description" class="desc-label">Add description</label>
       <textarea name="description" id="description" rows="4" placeholder="Enter your description here. Add your phone number also." required></textarea>
+
+      <label for="item_image">Upload Image:</label>
+      <input type="file" name="item_image" accept="image/*" required>
 
       <button type="submit" class="submit-btn">Submit Report</button>
     </form>
