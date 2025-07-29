@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <title>Report Found Item</title>
   <link rel="stylesheet" href="home.css">
-  <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
+<body background='Free Vector _ White background with blue tech hexagon.jpeg'>
 
 <!-- Navigation Bar -->
 <nav>
   <a href="signup.html">Sign Up</a>
+  <a href="login.html">Login</a>
   <a href="about.html">About Us</a>
   <a href="contact.html">Contact Us</a>
   <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
