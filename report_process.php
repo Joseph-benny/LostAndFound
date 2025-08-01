@@ -59,9 +59,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-    if (!in_array($image_type, $allowed_types)) {
-      die("Only JPG, JPEG, PNG & GIF files are allowed.");
-    }
+if (!in_array($image_type, $allowed_types)) {
+    echo "<script>
+        alert('Only JPG, JPEG, PNG & GIF files are allowed.');
+        window.location.href = 'lost.html';
+    </script>";
+    exit;
+}
+
 
     if (move_uploaded_file($_FILES["item_image"]["tmp_name"], $target_file)) {
       // ✅ Insert into found_items table

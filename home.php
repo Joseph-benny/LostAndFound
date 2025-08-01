@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body background='Free Vector _ White background with blue tech hexagon.jpeg'>
+<body>
 
 <!-- Navigation Bar -->
 <nav>

@@ -7,14 +7,14 @@
 /* Body */
 body {
   font-family: Arial, sans-serif;
-  
+  background-color: #100026;
   background-repeat:no-repeat;
   min-height: 100vh;
 }
 
 /* Navigation */
 nav {
-  background-color: #4285f4;
+  background-color: rgb(149, 148, 206);
   padding: 15px 30px;
   display: flex;
   gap: 50px;
@@ -27,7 +27,7 @@ nav {
 }
 
 nav a {
-  color: white;
+  color: black;
   text-decoration: none;
   font-weight: bold;
   font-size: 16px;
@@ -35,6 +35,15 @@ nav a {
 
 nav a:hover {
   text-decoration: underline;
+}
+
+.logo{
+  position: absolute;
+  top:50px;
+  left:60px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
 }
 
 .fa-circle-user {
@@ -56,15 +65,16 @@ nav a:hover {
   background-color: white;
   border: 2px solid #e0e0e0;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: #100026;
   width: 600px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 40px;
+  border-radius: 200px;
 }
 
 header {
-  background-color: #4285f4;
+  background-color:rgb(9, 10, 53);
   color: white;
   border-radius: 30px;
   padding: 20px 40px;
@@ -97,17 +107,17 @@ header h1 {
   width: 300px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 80px;
   outline: none;
 }
 
 .search-button {
   padding: 12px 20px;
-  background-color: #4285f4;
+  background-color:#100026;
   color: white;
   font-size: 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 80px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -142,7 +152,7 @@ header h1 {
   padding: 10px 16px;
   font-size: 16px;
   border: 2px solid #ccc;
-  border-radius: 8px;
+  border-radius: 80px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -158,7 +168,7 @@ header h1 {
   min-width: 200px;
   padding: 12px;
   box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-  border-radius: 10px;
+  border-radius: 80px;
   z-index: 1;
   right: 0;
 }
