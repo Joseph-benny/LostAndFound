@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Report Found Item</title>
-  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="home1.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
   <a href="contact.html">Contact Us</a>
   <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
 </nav>
-
+<img src="images/download (8).jpeg" class="logo" width="50" height="50">
 <div class="main-container">
   <header>
     <h1>Lost&nbsp;&nbsp; And &nbsp;&nbsp;Found</h1>
@@ -30,20 +30,31 @@
 
   <div class="view-section">
     <h2 class="c2">View Items</h2>
-    <div class="dropdown">
-      <button onclick="toggleDropdown()" class="dropbtn">Report an Item ▼</button>
-      <div id="dropdownMenu" class="dropdown-content">
-        <form action="lost.html" method="get">
-          <input type="submit" value="Report Lost Item">
-        </form>
-        <form action="found.html" method="get">
-          <input type="submit" value="Report Found Item">
-        </form>
-      </div>
-    </div>
+    <!-- Report an Item Dropdown -->
+<div class="dropdown">
+  <button onclick="toggleDropdown('reportDropdown')" class="dropbtn">Report an Item ▼</button>
+  <div id="reportDropdown" class="dropdown-content">
+    <form action="lost.html" method="get">
+      <input type="submit" value="Report Lost Item">
+    </form>
+    <form action="found.html" method="get">
+      <input type="submit" value="Report Found Item">
+    </form>
   </div>
 </div>
 
+<!-- Select Category Dropdown -->
+<div class="dropdown">
+  <button onclick="toggleDropdown('categoryDropdown')" class="dropbtn">Select Category ▼</button>
+  <div id="categoryDropdown" class="dropdown-content">
+    <button onclick="loadItems('lost_items')">Lost Items</button>
+    <button onclick="loadItems('found_items')">Found Items</button>
+  </div>
+</div>
+
+  </div>
+</div>
+  
 <!-- Items Display Section -->
 <div class="items-section">
   <?php
@@ -95,22 +106,33 @@
 </div>
 
 <script>
-function toggleDropdown() {
-  document.getElementById("dropdownMenu").classList.toggle("show");
+function toggleDropdown(id) {
+  const allDropdowns = document.querySelectorAll('.dropdown-content');
+  allDropdowns.forEach(d => {
+    if (d.id !== id) d.style.display = 'none'; // close others
+  });
+
+  const dropdown = document.getElementById(id);
+  if (dropdown.style.display === 'block') {
+    dropdown.style.display = 'none';
+  } else {
+    dropdown.style.display = 'block';
+  }
 }
 
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    const dropdowns = document.getElementsByClassName("dropdown-content");
-    for (let i = 0; i < dropdowns.length; i++) {
-      const openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
+function loadItems(table) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "fetch_items.php?table=" + table, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      const container = document.querySelector(".item-container");
+      container.innerHTML = xhr.responseText;
     }
-  }
-};
+  };
+  xhr.send();
+}
 </script>
+
 
 </body>
 </html>
