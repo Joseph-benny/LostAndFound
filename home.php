@@ -87,7 +87,8 @@
 
             echo "
                 <div class='item-box' onclick=\"window.location.href='connect.php?id=$itemId&table=$tableName'\">
-                    <img src='" . $item_image . "' alt='$itemName'>
+                   " . (!empty($item_image) ? "<img src='$item_image' alt='$itemName'>" : "") . "
+
                     <div class='item-name'>$itemName</div>
                 </div>
             ";
