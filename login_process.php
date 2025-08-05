@@ -46,7 +46,7 @@ if ($result && $result->num_rows === 1) {
         $_SESSION['first_name'] = $user['first_name'];
 
         // Redirect to dashboard or protected page
-        header("Location: dashboard.html"); // You can change to dashboard.php if needed
+        header("Location: dashboard.php"); // You can change to dashboard.php if needed
         exit;
     } else {
         // Password didn't match

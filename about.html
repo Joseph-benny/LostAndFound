@@ -2,49 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>About Us</title>
-  <link rel="stylesheet" href="about.css">
+  <title>About Us - Lost & Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #0d1a2f 70%, #1976d2 100%);
+      min-height: 100vh;
+      color: #e3eafc;
+    }
+    .navbar-custom {
+      background: linear-gradient(90deg, #0d1a2f 80%, #1976d2 100%);
+    }
+    .navbar-brand, .nav-link {
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+    }
+    .nav-link {
+      margin-left: 1.5rem !important;
+      margin-right: 1.5rem !important;
+    }
+    .navbar-brand i {
+      color: #90caf9;
+    }
+    .section-title {
+      color: #90caf9;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+    .card {
+      background: #162447;
+      color: #e3eafc;
+      border: none;
+    }
+    .card-title {
+      color: #90caf9;
+    }
+  </style>
 </head>
 <body>
-
-  <!-- Top Navigation -->
-  <nav>
-    <a href="home.php">Home</a>
-    <a href="signup.html">Sign Up</a>
-    <a href="contact.html">Contact Us</a>
-     <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
-  </nav>
-
-  <!-- About Header -->
-  <div class="about-header">
-    <div class="d1"><h2><span class="highlight">About Us</span> Lost And Found</h2></div>
-    <p class="intro">
-      <strong>Lost And Found is a useful website here you can help others by posting things that you have found or search for your lost items</strong>
-    </p>
-  </div>
-
-  <!-- About Sections -->
-  <div class="about-content">
-    <div class="section">
-      <h3>Our Mission</h3>
-      <p>To provide a platform for people to easily report and search for lost and found items.</p>
-    </div>
-
-    <div class="section">
-      <h3>Our Vision</h3>
-      <p>To create a global network of people helping people, fostering a sense of community and social responsibility.</p>
-    </div>
-
-    <div class="section">
-      <h3>Our Values</h3>
-      <p>We believe in the power of community and collaboration, and strive to create a platform that brings people together to help one another.</p>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow sticky-top mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="home.php">
+      <i class="fa-solid fa-magnifying-glass-location me-2"></i>Lost & Found
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <div class="navbar-nav">
+        <a class="nav-link text-white mx-3" href="home.php">Home</a>
+        <a class="nav-link text-white mx-3" href="about.html">About Us</a>
+        <a class="nav-link text-white mx-3" href="contact.html">Contact Us</a>
+        <a class="nav-link text-white mx-3" href="dashboard.php"><i class="fa-solid fa-circle-user"></i></a>
+      </div>
     </div>
   </div>
+</nav>
 
-  <!-- Footer -->
-  <footer>
-    &lt;&lt;&lt;&copy;&gt;&gt;&gt;
-  </footer>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg mt-5 mb-5 p-4">
+        <div class="card-body">
+          <h1 class="card-title section-title text-center"><i class="fa fa-info-circle me-2"></i>About Us</h1>
+          <p class="lead text-center mb-4">Welcome to Lost & Found, your trusted platform for reporting and searching lost or found items.</p>
+          <hr class="bg-primary">
+          <ul class="list-unstyled fs-5">
+            <li class="mb-3"><i class="fa fa-search text-primary me-2"></i>Search for lost or found items easily.</li>
+            <li class="mb-3"><i class="fa fa-plus-circle text-success me-2"></i>Report items you have found or lost.</li>
+            <li class="mb-3"><i class="fa fa-users text-info me-2"></i>Connect with the community to help return belongings.</li>
+            <li class="mb-3"><i class="fa fa-shield-alt text-warning me-2"></i>Safe and secure platform for all users.</li>
+          </ul>
+          <hr class="bg-primary">
+          <p class="text-center">Our mission is to reunite people with their lost belongings and foster a helpful community.<br>
+            <span class="fw-bold text-primary">Thank you for being a part of Lost & Found!</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Font Awesome JS (for icons) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 </body>
 </html>

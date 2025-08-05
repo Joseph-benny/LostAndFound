@@ -4,64 +4,145 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact Us</title>
-  <link rel="stylesheet" href="contact.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #0d1a2f 70%, #1976d2 100%);
+      min-height: 100vh;
+      color: #e3eafc;
+    }
+    .navbar-custom {
+      background: linear-gradient(90deg, #0d1a2f 80%, #1976d2 100%);
+    }
+    .navbar-brand, .nav-link {
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+      color: #e3eafc !important;
+    }
+    .nav-link {
+      margin-left: 1.5rem !important;
+      margin-right: 1.5rem !important;
+    }
+    .navbar-brand i {
+      color: #90caf9;
+    }
+    .card {
+      background: #162447;
+      color: #e3eafc;
+      border: none;
+    }
+    .section-title {
+      color: #90caf9;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+    .info i, .social i {
+      color: #90caf9;
+      font-size: 1.2rem;
+      margin-right: 10px;
+    }
+    .social {
+      margin-bottom: 1rem;
+    }
+    .header {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #90caf9;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .contact-box h2 {
+      color: #90caf9;
+      margin-bottom: 1rem;
+    }
+    .contact-box h3 {
+      color: #90caf9;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .contact-box {
+      padding: 2rem;
+      border-radius: 1rem;
+      background: #162447;
+      box-shadow: 0 0 20px rgba(25, 118, 210, 0.2);
+      color: #e3eafc;
+    }
+    .info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+  </style>
 </head>
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="home.php">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="signup.html">Sign Up</a></li>
-        <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
-    </ul>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow sticky-top mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="home.php">
+        <i class="fa-solid fa-magnifying-glass-location me-2"></i>Lost & Found
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="signup.html">Sign Up</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.php"><i class="fa-solid fa-circle-user"></i></a></li>
+        </ul>
+      </div>
+    </div>
   </nav>
 
   <!-- Contact Container -->
   <div class="container">
-    <div class="header">
-      <span class="back-arrow"> Contact us
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="header">Contact us</div>
+        <div class="contact-box mb-5">
+          <h2>Get in Touch</h2>
+          <p>If you have any inquiries get in touch with us. We'll be happy to help you.</p>
+
+          <div class="info">
+            <i class="fas fa-phone-alt"></i>
+            <span>+91 0011223355</span>
+          </div>
+
+          <div class="info">
+            <i class="fas fa-envelope"></i>
+            <span>lostfound@gmail.com</span>
+          </div>
+
+          <h3>Social Media</h3>
+          <div class="social">
+            <i class="fab fa-facebook-f"></i>
+            <p>Stay updated, connect, and engage with us on Facebook.</p>
+          </div>
+
+          <div class="social">
+            <i class="fab fa-instagram"></i>
+            <p>Reach out to us.</p>
+          </div>
+
+          <div class="social">
+            <i class="fab fa-twitter"></i>
+            <p>Follow us for real-time updates</p>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="contact-box">
-      <h2>Get in Touch</h2>
-      <p>If you have any inquiries get in touch with us. We'll be happy to help you.</p>
-
-      <div class="info">
-        <i class="fas fa-phone-alt"></i>
-        <span>+91 0011223355</span>
-      </div>
-
-      <div class="info">
-        <i class="fas fa-envelope"></i>
-        <span>lostfound@gmail.com</span>
-      </div>
-
-      <h3>Social Media</h3>
-      <div class="social">
-        <i class="fab fa-facebook-f"></i>
-        
-        
-          
-        <p>Stay updated, connect, and engage with us on Facebook.</p>
-      </div>
-
-      <div class="social">
-        <i class="fab fa-instagram"></i>
-        <p>Reach out to us.</p>
-      </div>
-
-      <div class="social">
-        <i class="fab fa-twitter"></i>
-        <p>Follow us for real-time updates</p>
-      </div>
-      
-    </div>
-    
   </div>
-  
 
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Font Awesome JS (for icons) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 </body>
 </html>

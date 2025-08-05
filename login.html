@@ -2,37 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lost and Found Login</title>
-  <link rel="stylesheet" href="login.css">
+  <title>Login - Lost & Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #0d1a2f 70%, #1976d2 100%);
+      min-height: 100vh;
+      color: #e3eafc;
+    }
+    .navbar-custom {
+      background: linear-gradient(90deg, #0d1a2f 80%, #1976d2 100%);
+    }
+    .navbar-brand, .nav-link {
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+    }
+    .nav-link {
+      margin-left: 1.5rem !important;
+      margin-right: 1.5rem !important;
+    }
+    .navbar-brand i {
+      color: #90caf9;
+    }
+    .card {
+      background: #162447;
+      color: #e3eafc;
+      border: none;
+    }
+    .form-label {
+      color: #90caf9;
+      font-weight: 500;
+    }
+    .btn-login {
+      background-color: #1976d2;
+      color: #fff;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+    .btn-login:hover {
+      background-color: #1565c0;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-     <div class="navbar">
-    <a href="signup.html">Sign Up</a>
-    <a href="home.php">Home</a>
-     <a href="about.html">About Us</a>
-     <a href="contact.html">Contact Us</a>
-       <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
-  </div>
-
-  <div class="main-card">
-    <div class="header">
-      Lost and Found
-    </div>
-
-    <div class="login-box">
-      <h2>Log In</h2>
-
-      <form action="login_process.php" method="post">
-        <label for="email" class="label">Email</label>
-        <input type="text" id="email" name="email" placeholder="User name" required>
-
-        <label for="password" class="label">Password</label>
-        <input type="password" id="password" name="password" required>
-
-        <button type="submit">Log In</button>
-      </form>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow sticky-top mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="home.php">
+      <i class="fa-solid fa-magnifying-glass-location me-2"></i>Lost & Found
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <div class="navbar-nav">
+        <a class="nav-link text-white mx-3" href="home.php">Home</a>
+        <a class="nav-link text-white mx-3" href="about.html">About Us</a>
+        <a class="nav-link text-white mx-3" href="contact.html">Contact Us</a>
+        <a class="nav-link text-white mx-3" href="signup.html"><i class="fa fa-user-plus me-1"></i>Sign Up</a>
+      </div>
     </div>
   </div>
+</nav>
 
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card shadow-lg mt-5 mb-5 p-4">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4"><i class="fa fa-sign-in-alt me-2"></i>Login</h2>
+          <form action="login_process.php" method="POST">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-login w-100 mt-3"><i class="fa fa-sign-in-alt me-1"></i>Login</button>
+          </form>
+          <p class="text-center mt-3">Don't have an account? <a href="signup.html" class="text-primary fw-bold">Sign Up</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Font Awesome JS (for icons) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 </body>
 </html>
