@@ -80,6 +80,9 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
       margin-bottom: 1rem;
       letter-spacing: 2px;
     }
+    .text-mutedtext-center{
+      color:white;
+    }
   </style>
   <script>
     function logout() {
@@ -134,7 +137,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
           </div>
         <?php endwhile; ?>
       <?php else: ?>
-        <p class="text-muted text-center">No lost items reported.</p>
+        <p class="text-mutedtext-center">No lost items reported.</p>
       <?php endif; ?>
     </div>
     <div class="col-md-6">
@@ -154,7 +157,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
           </div>
         <?php endwhile; ?>
       <?php else: ?>
-        <p class="text-muted text-center">No found items reported.</p>
+        <p class="text-mutedtext-center">No found items reported.</p>
       <?php endif; ?>
     </div>
   </div>

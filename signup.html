@@ -84,10 +84,28 @@
               <label for="last_name" class="form-label">Last Name</label>
               <input type="text" class="form-control" id="last_name" name="last_name" required>
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email Address</label>
-              <input type="email" class="form-control" id="email" name="email" required>
-            </div>
+           <div class="mb-3">
+  <label for="email" class="form-label">Email Address</label>
+  <input type="email" class="form-control" id="email" name="email" required
+         oninput="validateGmail(this)">
+  <small id="emailError" style="color:red; display:none;">invalid mail ID</small>
+</div>
+
+<script>
+  function validateGmail(input) {
+    const emailError = document.getElementById('emailError');
+    const value = input.value.trim();
+    
+    if (value && !value.endsWith('@gmail.com')) {
+      emailError.style.display = 'block';
+      input.setCustomValidity('Email must end with @gmail.com');
+    } else {
+      emailError.style.display = 'none';
+      input.setCustomValidity('');
+    }
+  }
+</script>
+
             <div class="mb-3">
               <label for="phone" class="form-label">Phone Number</label>
               <input type="tel" class="form-control" id="phone" name="phone" required>
