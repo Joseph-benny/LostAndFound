@@ -106,7 +106,7 @@ $conn->close();
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container-fluid px-4">
-    <a class="navbar-brand fw-bold" href="index.php"><i class="fa fa-search me-2"></i>Lost & Found</a>
+    <a class="navbar-brand fw-bold" href="home.php"><i class="fa fa-search me-2"></i>Lost & Found</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -135,10 +135,10 @@ $conn->close();
   <ul class="list-group mb-4">
     <li class="list-group-item"><strong>Item Name:</strong> <?php echo htmlspecialchars($item['item_name']); ?></li>
     <li class="list-group-item"><strong>Description:</strong> <?php echo htmlspecialchars($item['description']); ?></li>
-    <li class="list-group-item"><strong>Location:</strong> <?php echo htmlspecialchars($item['location']); ?></li>
-    <li class="list-group-item"><strong>Date <?php echo $table === 'lost_items' ? 'Lost' : 'Found'; ?>:</strong> 
+    <!--<li class="list-group-item"><strong>Location:</strong> <?php echo htmlspecialchars($item['location']); ?></li>-->
+    <!--<li class="list-group-item"><strong>Date <?php echo $table === 'lost_items' ? 'Lost' : 'Found'; ?>:</strong> 
       <?php echo htmlspecialchars($table === 'lost_items' ? $item['date_lost'] : $item['date_found']); ?>
-    </li>
+    </li>-->
     <li class="list-group-item">
       <strong>Status:</strong>
       <span class="badge <?php echo $item['status'] === 'Lost' ? 'bg-danger' : 'bg-success'; ?>">

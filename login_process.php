@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start session to hold user login info
+session_start();
 
 // Database connection setup
 $servername = "localhost";
@@ -20,7 +20,7 @@ $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
 // Check if email or password is empty
-if (empty($email) || empty($password)) {
+if ($email === '' || $password === '') {
     echo "<script>
         alert('Please enter both email and password.');
         window.location.href = 'login.html';
@@ -29,7 +29,7 @@ if (empty($email) || empty($password)) {
 }
 
 // Prepare SQL query to fetch user by email
-$sql = "SELECT * FROM users WHERE email = ?";
+$sql = "SELECT user_id, first_name, email, password, role FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -41,13 +41,20 @@ if ($result && $result->num_rows === 1) {
 
     // Verify the hashed password
     if (password_verify($password, $user['password'])) {
-        // Password matched — start session
+        // Store session details
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['first_name'] = $user['first_name'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['role'] = $user['role'];
 
-        // Redirect to dashboard or protected page
-        header("Location: dashboard.php"); // You can change to dashboard.php if needed
-        exit;
+        // Redirect based on role
+        if ($user['role'] == 0) {
+            header("Location: dashboard.php");
+            exit;
+        } else if ($user['role'] == 1) {
+            header("Location: admin.php");
+            exit;
+        } 
     } else {
         // Password didn't match
         echo "<script>

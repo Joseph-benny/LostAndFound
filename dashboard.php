@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])|| $_SESSION['role'] != 0) {
     header("Location: login.html");
     exit;
 }
@@ -12,6 +12,50 @@ $conn = new mysqli("localhost", "root", "", "lostfound");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+if ($user_id === 0 && isset($_SESSION['is_admin_email']) && $_SESSION['is_admin_email'] === true) {
+    // Admin acting as user
+    $user = [
+        'first_name' => $_SESSION['first_name'] ?? 'Admin',
+        'last_name'  => '',
+        'email'      => $_SESSION['email'] ?? '',
+        'status'     => 'active'
+    ];
+    $lost_items = $conn->query("SELECT * FROM lost_items WHERE 1=0"); // empty
+    $found_items = $conn->query("SELECT * FROM found_items WHERE 1=0"); // empty
+} else {
+    // Normal user
+    $user_query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
+    $user = $user_query->fetch_assoc();
+
+    if (isset($user['status']) && $user['status'] == 'blocked') {
+        session_destroy();
+        echo "<script>
+            alert('Your account is currently blocked by the admin.');
+            window.location.href = 'login.html';
+        </script>";
+        exit;
+    }
+
+    $lost_items = $conn->query("SELECT * FROM lost_items WHERE user_id = $user_id");
+    $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id");
+}
+
+// Fetch user details
+$user_query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
+$user = $user_query->fetch_assoc();
+
+// Check if the user is blocked
+if (isset($user['status']) && $user['status'] == 'blocked') {
+    // Destroy session and redirect to login with message
+    session_destroy();
+    echo "<script>
+        alert('Your account is currently blocked by the admin.');
+        window.location.href = 'login.html';
+    </script>";
+    exit;
+}
+
 
 // Fetch user details
 $user_query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
@@ -100,7 +144,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
       <div class="navbar-nav">
         <a class="nav-link text-white mx-3" href="home.php">Home</a>
         <a class="nav-link text-white mx-3" href="about.html">About Us</a>
-        <a class="nav-link text-white mx-3" href="dashboard.php"><i class="fa-solid fa-circle-user"></i></a>
+        
       </div>
     </div>
     <button class="btn btn-logout ms-3" onclick="logout()"><i class="fa fa-sign-out-alt me-1"></i>Logout</button>
@@ -115,7 +159,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
     <div class="col-md-9">
       <h2 class="fw-bold section-title">Welcome back, <?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h2>
       <p>Email: <?php echo htmlspecialchars($user['email']); ?></p>
-      <a href="edit_profile.php" class="btn btn-edit btn-sm mb-2"><i class="fa fa-edit me-1"></i>Edit Profile</a>
+      <a href="editprofile.php" class="btn btn-edit btn-sm mb-2"><i class="fa fa-edit me-1"></i>Edit Profile</a>
     </div>
   </div>
 
@@ -130,7 +174,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
               <p class="card-text"><?php echo nl2br(htmlspecialchars($lost['description'])); ?></p>
               <p class="card-text"><span class="badge bg-danger"><?php echo htmlspecialchars($lost['status']); ?></span></p>
               <div class="d-flex gap-2">
-                <a href="edit_lost.php?id=<?php echo $lost['lost_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
+                <a href="edit_items.php?id=<?php echo $lost['lost_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
                 <a href="mark_claimed.php?type=lost&id=<?php echo $lost['lost_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>
               </div>
             </div>
@@ -150,7 +194,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
               <p class="card-text"><?php echo nl2br(htmlspecialchars($found['description'])); ?></p>
               <p class="card-text"><span class="badge bg-success"><?php echo htmlspecialchars($found['status']); ?></span></p>
               <div class="d-flex gap-2">
-                <a href="edit_found.php?id=<?php echo $found['found_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
+                <a href="edit_items.php?id=<?php echo $found['found_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
                 <a href="mark_claimed.php?type=found&id=<?php echo $found['found_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>
               </div>
             </div>
