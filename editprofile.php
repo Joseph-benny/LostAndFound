@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
     $old_password = $_POST['old_password'];
     $new_password = $_POST['new_password'];
 
@@ -31,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         if (!password_verify($old_password, $user['password'])) {
             echo "<script>alert('Old password is incorrect!');</script>";
         } else {
-            $update_sql = "UPDATE users SET first_name=?, last_name=?, email=?";
-            $params = [$first_name, $last_name, $email];
+            $update_sql = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?";
+            $params = [$first_name, $last_name, $email, $phone];
 
             // If email changed, new password required
             if ($email !== $user['email'] && empty($new_password)) {
@@ -164,6 +165,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_account'])) {
                         <div class="mb-3">
                             <label class="form-label">Last Name</label>
                             <input type="text" name="last_name" class="form-control" value="<?= htmlspecialchars($user['last_name']) ?>" required>
+                        </div>
+                         <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($user['phone']) ?>" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Email (Gmail only)</label>

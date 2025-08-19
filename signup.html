@@ -77,13 +77,33 @@
           <h2 class="card-title text-center mb-4"><i class="fa fa-user-plus me-2"></i>Sign Up</h2>
           <form action="register.php" method="POST">
             <div class="mb-3">
-              <label for="first_name" class="form-label">First Name</label>
-              <input type="text" class="form-control" id="first_name" name="first_name" required>
-            </div>
-            <div class="mb-3">
-              <label for="last_name" class="form-label">Last Name</label>
-              <input type="text" class="form-control" id="last_name" name="last_name" required>
-            </div>
+  <label for="first_name" class="form-label">First Name</label>
+  <input type="text" class="form-control" id="first_name" name="first_name" required>
+</div>
+
+<script>
+  document.getElementById("first_name").addEventListener("input", function () {
+    let value = this.value;
+    if (value.length > 0) {
+      this.value = value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  });
+</script>
+
+           <div class="mb-3">
+  <label for="last_name" class="form-label">Last Name</label>
+  <input type="text" class="form-control" id="last_name" name="last_name" required>
+</div>
+
+<script>
+  document.getElementById("last_name").addEventListener("input", function () {
+    let value = this.value;
+    if (value.length > 0) {
+      this.value = value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  });
+</script>
+
            <div class="mb-3">
   <label for="email" class="form-label">Email Address</label>
   <input type="email" class="form-control" id="email" name="email" required
@@ -107,9 +127,12 @@
 </script>
 
             <div class="mb-3">
-              <label for="phone" class="form-label">Phone Number</label>
-              <input type="tel" class="form-control" id="phone" name="phone" required>
-            </div>
+  <label for="phone" class="form-label">Phone Number</label>
+  <input type="tel" class="form-control" id="phone" name="phone" 
+         pattern="[0-9]{10}" maxlength="10" minlength="10" required 
+         title="Phone number must be exactly 10 digits">
+</div>
+
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" name="password" required>

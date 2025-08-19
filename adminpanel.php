@@ -155,11 +155,11 @@ $result = $conn->query("SELECT * FROM users ORDER BY user_id DESC");
                         </span>
                     </td>
                     <td>
-                        <a href="adminpanel.php?delete=<?= $row['user_id'] ?>" 
+                       <!-- <a href="adminpanel.php?delete=<?= $row['user_id'] ?>" 
                            class="btn btn-danger btn-sm"
                            onclick="return confirm('Are you sure you want to delete this user and all their items?');">
                            Delete
-                        </a>
+                        </a>-->
                         <a href="adminpanel.php?toggle_block=<?= $row['user_id'] ?>&status=<?= $row['status'] ?>" 
                            class="btn btn-warning btn-sm">
                            <?= $row['status'] === 'active' ? 'Block' : 'Unblock' ?>

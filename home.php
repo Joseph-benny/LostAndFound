@@ -1,4 +1,5 @@
 <?php
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -106,16 +107,80 @@
       </div>
     </div>
     <div class="col-md-6 mb-2">
-      <div class="dropdown">
-        <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm" type="button" data-bs-toggle="dropdown">
-          <i class="fa fa-list me-1"></i>Select Category
-        </button>
-        <ul class="dropdown-menu w-100">
-          <li><a class="dropdown-item" href="#" onclick="loadItems('lost_items')"><i class="fa fa-search text-danger me-1"></i>Lost Items</a></li>
-          <li><a class="dropdown-item" href="#" onclick="loadItems('found_items')"><i class="fa fa-search text-success me-1"></i>Found Items</a></li>
-        </ul>
-      </div>
-    </div>
+<!-- ✅ Select Category Dropdown -->
+<div class="dropdown">
+  <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm" type="button" data-bs-toggle="dropdown">
+    <i class="fa fa-list me-1"></i>Select Category
+  </button>
+  <ul class="dropdown-menu w-100">
+    <li>
+      <a class="dropdown-item" href="#" onclick="loadItems('all')">
+        <i class="fa fa-th-large text-primary me-1"></i>All Items
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item" href="#" onclick="loadItems('lost_items')">
+        <i class="fa fa-exclamation-circle text-danger me-1"></i>Lost Items
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item" href="#" onclick="loadItems('found_items')">
+        <i class="fa fa-check-circle text-success me-1"></i>Found Items
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- ✅ Container to show results -->
+<div id="items-container" class="mt-3"></div>
+
+<!-- ✅ Script for Dropdown Logic -->
+<script>
+  function loadItems(category) {
+    let container = document.getElementById("items-container");
+    container.innerHTML = ""; // Clear old content
+
+    if (category === "all") {
+      container.innerHTML = `
+        <div class="alert alert-primary shadow-sm">Showing <b>All Items</b>...</div>
+      `;
+    } else if (category === "lost_items") {
+      container.innerHTML = `
+        <div class="alert alert-danger shadow-sm">Showing <b>Lost Items</b>...</div>
+      `;
+    } else if (category === "found_items") {
+      container.innerHTML = `
+        <div class="alert alert-success shadow-sm">Showing <b>Found Items</b>...</div>
+      `;
+    }
+  }
+</script>
+
+</div>
+
+<!-- Where items will be displayed -->
+<div id="items-container" class="row mt-4"></div>
+
+<script>
+// Function to load items dynamically
+function loadItems(category) {
+  // Create AJAX request
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "fetch_items.php?category=" + category, true);
+  xhr.onload = function() {
+    if (this.status === 200) {
+      document.getElementById("items-container").innerHTML = this.responseText;
+    }
+  };
+  xhr.send();
+}
+
+// By default load all items
+window.onload = function() {
+  loadItems('all');
+};
+</script>
+
   </div>
 
   <!-- Items Display Section -->

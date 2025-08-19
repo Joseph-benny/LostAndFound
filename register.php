@@ -19,7 +19,9 @@ $last_name = $_POST['last_name'] ?? '';
 $phone = $_POST['phone'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password for security
-
+if (!preg_match('/^[0-9]{10}$/', $phone)) {
+    die("Invalid phone number. Must be exactly 10 digits.");
+}
 // Insert into database
 $sql = "INSERT INTO users (user_id,first_name, last_name, phone, email, password)
         VALUES ('$user_id','$first_name', '$last_name', '$phone', '$email', '$password')";

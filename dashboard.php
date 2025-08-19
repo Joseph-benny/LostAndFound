@@ -13,6 +13,24 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Handle account deletion
+if (isset($_GET['delete']) && $_GET['delete'] == $user_id) {
+    // Delete related items first
+    $conn->query("DELETE FROM lost_items WHERE user_id = $user_id");
+    $conn->query("DELETE FROM found_items WHERE user_id = $user_id");
+
+    // Delete user account
+    $conn->query("DELETE FROM users WHERE user_id = $user_id");
+
+    // Destroy session and redirect to homepage
+    session_destroy();
+    echo "<script>
+            alert('Your account and all reported items have been deleted.');
+            window.location.href = 'home.php';
+          </script>";
+    exit;
+}
+
 if ($user_id === 0 && isset($_SESSION['is_admin_email']) && $_SESSION['is_admin_email'] === true) {
     // Admin acting as user
     $user = [
@@ -127,6 +145,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
     .text-mutedtext-center{
       color:white;
     }
+    
   </style>
   <script>
     function logout() {
@@ -209,8 +228,14 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
   <div class="row mt-4">
     <div class="col text-center">
       <a href="home.php" class="btn btn-primary me-2"><i class="fa fa-eye me-1"></i>View Items</a>
-      <a href="contact.html" class="btn btn-outline-secondary"><i class="fa fa-envelope me-1"></i>Contact Us</a>
+      <a href="contact.html" class="btn btn-outline-secondary"><i class="fa fa-envelope me-1"></i>Contact Us</a><br><br>
+        <a href="dashboard.php?delete=<?= $user['user_id'] ?>" 
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete your account and all reported items?');">
+                           Delete Account
+                        </a>
     </div>
+  
   </div>
 </div>
 

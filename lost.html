@@ -98,17 +98,40 @@
               <input type="text" class="form-control" id="location" name="location" required>
             </div>
             <div class="mb-3">
-              <label for="phone" class="form-label">Phone Number</label>
-              <input type="number" class="form-control" id="phone" name="phone" required>
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" 
+                pattern="[0-9]{10}" maxlength="10" minlength="10" required 
+                title="Phone number must be exactly 10 digits">
             </div>
             <div class="mb-3">
               <label for="date_lost" class="form-label">Date Lost</label>
               <input type="date" class="form-control" id="date_lost" name="date_lost" required>
             </div>
-            <div class="mb-3">
-              <label for="description" class="form-label">Add Description</label>
-              <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter your description here. Add your phone number also." required></textarea>
-            </div>
+           <div class="mb-3">
+  <label for="description" class="form-label">Add Description</label>
+  <textarea class="form-control" id="description" name="description" rows="4" 
+    placeholder="Enter your description here.Max of 60 words." required></textarea>
+  <small id="wordCount" class="text-muted">0 / 60 words</small>
+</div>
+
+<script>
+  const description = document.getElementById("description");
+  const wordCount = document.getElementById("wordCount");
+  const maxWords = 60;
+
+  description.addEventListener("input", function () {
+    let words = this.value.trim().split(/\s+/).filter(word => word.length > 0);
+    let count = words.length;
+
+    if (count > maxWords) {
+      this.value = words.slice(0, maxWords).join(" ");
+      count = maxWords;
+    }
+
+    wordCount.textContent = count + " / " + maxWords + " words";
+  });
+</script>
+
             <div class="mb-3">
               <label for="item_image" class="form-label">Upload Image</label>
               <input type="file" class="form-control" id="item_image" name="item_image" accept="image/*">

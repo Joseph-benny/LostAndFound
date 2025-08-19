@@ -97,10 +97,14 @@
               <label for="location" class="form-label">Found Location</label>
               <input type="text" class="form-control" id="location" name="location" required>
             </div>
+          
             <div class="mb-3">
-              <label for="phone" class="form-label">Phone Number</label>
-              <input type="number" class="form-control" id="phone" name="phone" required>
-            </div>
+  <label for="phone" class="form-label">Phone Number</label>
+  <input type="tel" class="form-control" id="phone" name="phone" 
+         pattern="[0-9]{10}" maxlength="10" minlength="10" required 
+         title="Phone number must be exactly 10 digits">
+</div>
+
             <div class="mb-3">
               <label for="date_found" class="form-label">Date Found</label>
               <input type="date" class="form-control" id="date_found" name="date_found" required>

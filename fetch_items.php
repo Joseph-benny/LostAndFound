@@ -1,38 +1,43 @@
 <?php
-// fetch_items.php
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "lostfound";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli("localhost", "root", "", "lostfound");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$table = $_GET['table'];
+$category = $_GET['category'] ?? 'all';
 
-if (!in_array($table, ['lost_items', 'found_items'])) {
-    exit("Invalid table name.");
+if ($category === "lost_items") {
+    $sql = "SELECT item_name, description, status, item_image, 'Lost' AS type FROM lost_items";
+} elseif ($category === "found_items") {
+    $sql = "SELECT item_name, description, status, item_image, 'Found' AS type FROM found_items";
+} else {
+    // Fetch both with same column structure
+    $sql = "(SELECT item_name, description, status, item_image, 'Lost' AS type FROM lost_items)
+            UNION ALL
+            (SELECT item_name, description, status, item_image, 'Found' AS type FROM found_items)";
 }
 
-$sql = "SELECT item_name, item_image, " . ($table === 'lost_items' ? 'lost_id' : 'found_id') . " as item_id FROM $table";
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
+if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $itemName = htmlspecialchars($row['item_name']);
-        $itemImage = htmlspecialchars($row['item_image']);
-        $itemId = htmlspecialchars($row['item_id']);
-        echo "
-        <div class='item-box' onclick=\"window.location.href='connect.php?id=$itemId&table=$table'\">
-            <img src='$itemImage' alt='$itemName'>
-            <div class='item-name'>$itemName</div>
-        </div>";
+        echo '<div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                  <img src="uploads/' . htmlspecialchars($row['item_image']) . '" 
+                       class="card-img-top" 
+                       alt="Item" 
+                       onerror="this.src=\'default.png\'">
+                  <div class="card-body">
+                    <h5 class="card-title">' . htmlspecialchars($row['item_name']) . '</h5>
+                    <p class="card-text">' . htmlspecialchars($row['description']) . '</p>
+                    <span class="badge bg-' . ($row['status']=="claimed" ? "secondary" : "success") . '">' . htmlspecialchars($row['status']) . '</span>
+                    <span class="badge bg-info ms-1">' . htmlspecialchars($row['type']) . '</span>
+                  </div>
+                </div>
+              </div>';
     }
 } else {
-    echo "<p>No items found.</p>";
+    echo "<p class='text-center text-muted'>No items found.</p>";
 }
 
 $conn->close();
