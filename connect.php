@@ -67,6 +67,9 @@ $conn->close();
     .navbar {
       background: linear-gradient(to right, #0d1a2f, #1976d2);
     }
+    .navbar-nav{
+      gap:40px;
+    }
     .navbar .nav-link {
       color: #fff !important;
       font-weight: 500;
@@ -135,7 +138,7 @@ $conn->close();
   <ul class="list-group mb-4">
     <li class="list-group-item"><strong>Item Name:</strong> <?php echo htmlspecialchars($item['item_name']); ?></li>
     <li class="list-group-item"><strong>Description:</strong> <?php echo htmlspecialchars($item['description']); ?></li>
-    <!--<li class="list-group-item"><strong>Location:</strong> <?php echo htmlspecialchars($item['location']); ?></li>-->
+    <li class="list-group-item"><strong>Location:</strong> <?php echo htmlspecialchars($item['location']); ?></li>
     <!--<li class="list-group-item"><strong>Date <?php echo $table === 'lost_items' ? 'Lost' : 'Found'; ?>:</strong> 
       <?php echo htmlspecialchars($table === 'lost_items' ? $item['date_lost'] : $item['date_found']); ?>
     </li>-->

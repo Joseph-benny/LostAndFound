@@ -67,7 +67,7 @@ if ($result && $result->num_rows === 1) {
     // No user found with that email
     echo "<script>
         alert('User not found. Please sign up.');
-        window.location.href = 'login.html';
+        window.location.href = 'signup.html';
     </script>";
     exit;
 }

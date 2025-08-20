@@ -198,48 +198,8 @@ window.onload = function() {
     }
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-    // LOST ITEMS SECTION
-    echo '<h2 class="section-title text-center">Lost Items</h2>';
-    $sqlLost = "SELECT item_name, item_image, lost_id FROM lost_items";
-    if (!empty($search)) {
-        $sqlLost .= " WHERE item_name LIKE '$search%'";
-    }
-    $resultLost = $conn->query($sqlLost);
+   
 
-    if ($resultLost && $resultLost->num_rows > 0) {
-        echo '<div class="row lost-names-row justify-content-center">';
-        while ($row = $resultLost->fetch_assoc()) {
-            $itemName = htmlspecialchars($row['item_name']);
-            $itemImage = htmlspecialchars($row['item_image']);
-            $itemId = htmlspecialchars($row['lost_id']);
-            if (!empty($itemImage)) {
-                echo '
-                <div class="col-md-3 mb-4">
-                  <div class="card h-100 shadow-lg border-0" onclick="window.location.href=\'connect.php?id='.$itemId.'&table=lost_items\'" style="cursor:pointer;">
-                    <img src="'.$itemImage.'" class="card-img-top" alt="'.$itemName.'" style="height:180px;object-fit:cover;">
-                    <div class="card-body text-center">
-                      <h5 class="card-title text-primary">'.$itemName.'</h5>
-                      <span class="badge bg-danger">Lost</span>
-                    </div>
-                  </div>
-                </div>
-                ';
-            } else {
-                // Print only the name in a column if no image
-          
-echo '
-<div class="col-md-2 mb-4 d-flex flex-column align-items-center justify-content-center">
-  <span class="fw-bold text-primary mb-2">'.$itemName.'</span>
-  <span class="badge bg-danger">Lost</span>
-</div>
-';
-// ...existing code...
-            }
-        }
-        echo '</div>';
-    } else {
-        echo '<div class="alert alert-info text-center">No lost items found.</div>';
-    }
 
     // SPACING BETWEEN LOST AND FOUND
     echo '<div class="my-5"></div>';
@@ -274,6 +234,38 @@ echo '
     } else {
         echo '<div class="alert alert-info text-center">No found items found.</div>';
     }
+
+     // LOST ITEMS SECTION
+    echo '<h2 class="section-title text-center">Lost Items</h2>';
+    $sqlLost = "SELECT item_name, item_image, lost_id FROM lost_items";
+    if (!empty($search)) {
+        $sqlLost .= " WHERE item_name LIKE '$search%'";
+    }
+    $resultLost = $conn->query($sqlLost);
+
+if ($resultLost && $resultLost->num_rows > 0) {
+    echo '<div class="row lost-names-row justify-content-center">';
+    while ($row = $resultLost->fetch_assoc()) {
+        $itemName = htmlspecialchars($row['item_name']);
+        $itemImage = !empty($row['item_image']) ? htmlspecialchars($row['item_image']) : 'images/David Wojnarowicz.jpeg'; 
+        $itemId = htmlspecialchars($row['lost_id']);
+
+        echo '
+        <div class="col-md-3 mb-4">
+          <div class="card h-100 shadow-lg border-0" 
+               onclick="window.location.href=\'connect.php?id='.$itemId.'&table=lost_items\'" 
+               style="cursor:pointer;">
+            <img src="'.$itemImage.'" class="card-img-top" alt="'.$itemName.'" style="height:180px;object-fit:cover;">
+            <div class="card-body text-center">
+              <h5 class="card-title text-primary">'.$itemName.'</h5>
+              <span class="badge bg-danger">Lost</span>
+            </div>
+          </div>
+        </div>
+        ';
+    }
+    echo '</div>';
+}
 
     $conn->close();
     ?>
