@@ -163,7 +163,31 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
       <div class="navbar-nav">
         <a class="nav-link text-white mx-3" href="home.php">Home</a>
         <a class="nav-link text-white mx-3" href="about.html">About Us</a>
-        
+        <li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle position-relative" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
+    <i class="fa fa-bell"></i>
+    <?php
+      $user_id = $_SESSION['user_id'];
+      $count = $conn->query("SELECT COUNT(*) as c FROM notifications WHERE user_id=$user_id AND status='unread'")->fetch_assoc()['c'];
+      if ($count > 0) {
+          echo "<span class='badge bg-danger position-absolute top-0 start-100 translate-middle'>$count</span>";
+      }
+    ?>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <?php
+      $result = $conn->query("SELECT * FROM notifications WHERE user_id=$user_id ORDER BY created_at DESC LIMIT 5");
+      if ($result->num_rows > 0) {
+          while ($n = $result->fetch_assoc()) {
+              echo "<li><a class='dropdown-item' href='mark_read.php?id={$n['notification_id']}'>{$n['message']} <br><small class='text-muted'>{$n['created_at']}</small></a></li>";
+          }
+      } else {
+          echo "<li><span class='dropdown-item text-muted'>No notifications</span></li>";
+      }
+    ?>
+  </ul>
+</li>
+
       </div>
     </div>
     <button class="btn btn-logout ms-3" onclick="logout()"><i class="fa fa-sign-out-alt me-1"></i>Logout</button>

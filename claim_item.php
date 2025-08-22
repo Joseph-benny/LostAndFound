@@ -1,85 +1,76 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.html");
+    exit;
+}
+
+/*if (!isset($_GET['item_id'])) {
+    die("No item selected.");
+}*/
+$lost_id = $_GET['lost_id'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claim Item</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      background: #f5f5f5;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
     }
-
     .form-container {
       background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
       max-width: 400px;
       width: 100%;
-      text-align: center;
     }
-
-    h2 {
-      margin-bottom: 10px;
-      font-size: 22px;
-      color: #333;
-    }
-
-    p {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    input[type="text"] {
+    input, textarea {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
+      padding: 10px;
+      margin-bottom: 12px;
       border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
+      border-radius: 6px;
     }
-
-    input[type="text"]:focus {
-      border-color: #007BFF;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
-    }
-
     button {
       width: 100%;
       padding: 12px;
       border: none;
-      border-radius: 8px;
-      background-color: #f0f0f0;
-      color: #333;
+      border-radius: 6px;
+      background: #007BFF;
+      color: #fff;
       font-size: 15px;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-
     button:hover {
-      background-color: #e0e0e0;
+      background: #0056b3;
     }
   </style>
 </head>
 <body>
   <div class="form-container">
-    <h2>Claim Item</h2>
-    <p>Please answer the following questions</p>
-    
-    <form action="claim_process.php" method="POST">
-      <input type="text" name="lost_when_where" placeholder="When and where did you lose the item?" required>
-      <input type="text" name="description" placeholder="Describe the item and any identifying features?" required>
-      <input type="text" name="brand" placeholder="Is there a specific brand of this item?">
-      <input type="text" name="additional_info" placeholder="Do you have any additional information?">
-      
+    <h2>Claim This Item</h2>
+    <form action="claim_process.php" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="lost_id" value="<?= $lost_id ?>">
+
+      <label>Date you lost it:</label>
+      <input type="date" name="user_date_lost" required>
+
+      <label>Description:</label>
+      <textarea name="claim_description" rows="3" placeholder="Describe the item and unique features" required></textarea>
+
+      <label>Upload proof (optional):</label>
+      <input type="file" name="proof_image" accept="image/*">
+
       <button type="submit">Send for approval</button>
     </form>
   </div>
