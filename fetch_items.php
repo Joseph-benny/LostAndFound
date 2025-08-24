@@ -69,13 +69,6 @@ function fetch_items($conn, $table, $type, $search) {
 }
 
 // Logic to determine which items to fetch
-if ($category === 'all' || $category === 'lost') {
-    $html .= '<h2 class="section-title text-center">Lost Items</h2>';
-    $html .= fetch_items($conn, 'lost_items', 'lost', $search);
-    if (empty($html) || strpos($html, 'col-md-4') === false) {
-        $html .= '<div class="alert alert-info text-center mt-3">No lost items found.</div>';
-    }
-}
 if ($category === 'all' || $category === 'found') {
     $html .= '<h2 class="section-title text-center mt-5">Found Items</h2>';
     $html .= fetch_items($conn, 'found_items', 'found', $search);
@@ -83,6 +76,15 @@ if ($category === 'all' || $category === 'found') {
         $html .= '<div class="alert alert-info text-center mt-3">No found items found.</div>';
     }
 }
+
+if ($category === 'all' || $category === 'lost') {
+    $html .= '<h2 class="section-title text-center">Lost Items</h2>';
+    $html .= fetch_items($conn, 'lost_items', 'lost', $search);
+    if (empty($html) || strpos($html, 'col-md-4') === false) {
+        $html .= '<div class="alert alert-info text-center mt-3">No lost items found.</div>';
+    }
+}
+
 
 $conn->close();
 echo $html;

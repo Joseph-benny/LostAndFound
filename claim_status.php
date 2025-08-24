@@ -27,6 +27,7 @@ $result = $stmt->get_result();
     table { border-collapse: collapse; width: 100%; margin-top: 20px; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
     th { background: #007BFF; color: white; }
+    tr{color: black;}
   </style>
 </head>
 <body>

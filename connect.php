@@ -158,7 +158,7 @@ $conn->close();
   </ul>
 
   <div class="text-end mt-4">
-    <a href="claim_item.php?id=<?php echo $id; ?>&table=<?php echo $table; ?>" class="btn btn-warning btn-lg">
+    <a href="claim_item.php?found_id=<?php echo $id; ?>&table=<?php echo $table; ?>" class="btn btn-warning btn-lg">
       Claim Item
     </a>
   </div>

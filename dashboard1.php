@@ -176,7 +176,7 @@ $found_result = $found_items->get_result();
             <div class="col-md-4">
                 <div class="card mb-3 shadow">
                     <?php if (!empty($item['item_image'])): ?>
-                        <img src="/mini_project/uploads/<?php echo htmlspecialchars($item['item_image']); ?>" class="card-img-top" alt="Item Image" style="height:180px;object-fit:cover;">
+                        <img src="uploads/<?php echo htmlspecialchars($item['item_image']);?>" class="card-img-top" alt="Item Image" style="height:180px;object-fit:cover;">
                     <?php endif; ?>
                     <div class="card-body">
                         <h5 class="card-title"><?php echo htmlspecialchars($item['item_name']); ?></h5>
