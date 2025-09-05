@@ -159,11 +159,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       <?php
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : 0; // default to 0 if not set
 ?>
-
+<button type="submit" class="btn btn-success w-100 mb-2">
+    <i class="fa fa-save me-1"></i>Save Changes
+</button>
 <a href="<?php echo ($role == 1) ? 'dashboard1.php' : 'dashboard.php'; ?>" 
    class="btn btn-secondary w-100">
    <i class="fa fa-arrow-left me-1"></i>Cancel
 </a>
+<!-- Add this inside your <form> before the Cancel button -->
+
+
 
                     </form>
                 </div>

@@ -21,6 +21,7 @@ session_start();
         .navbar-brand, .nav-link {
             letter-spacing: 2px;
             font-size: 1.1rem;
+            color: #e3eafc !important;
         }
         .nav-link {
             margin-left: 1.5rem !important;
@@ -34,10 +35,14 @@ session_start();
             margin-top: 2rem;
             margin-bottom: 1rem;
             letter-spacing: 2px;
+            font-weight: bold;
         }
         .card {
             background: #162447;
             color: #e3eafc;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(25, 118, 210, 0.2);
         }
         .card-title {
             color: #90caf9;
@@ -46,8 +51,52 @@ session_start();
             font-size: 1rem;
             padding: 0.5em 1em;
         }
-        .lost-names-row {
+        .search-bar {
+            background: #12203a;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
             margin-bottom: 2rem;
+            box-shadow: 0 0 10px rgba(25, 118, 210, 0.08);
+        }
+        .dropdown-menu {
+            background: #162447;
+            color: #e3eafc;
+            border-radius: 0.7rem;
+        }
+        .dropdown-item {
+            color: #e3eafc;
+        }
+        .dropdown-item:hover {
+            background: #1976d2;
+            color: #fff;
+        }
+        .btn-primary, .btn-outline-primary, .btn-outline-secondary {
+            border-radius: 8px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        .btn-primary {
+            background-color: #1976d2;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #1565c0;
+        }
+        .btn-outline-primary {
+            border-color: #1976d2;
+            color: #1976d2;
+        }
+        .btn-outline-primary:hover {
+            background-color: #1976d2;
+            color: #fff;
+        }
+        .btn-outline-secondary {
+            border-color: #90caf9;
+            color: #90caf9;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #90caf9;
+            color: #162447;
         }
     </style>
 </head>
@@ -89,8 +138,9 @@ session_start();
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col-md-6 mb-2">
+    <!-- Grouped dropdown buttons row -->
+    <div class="row mb-4 g-2">
+        <div class="col-md-4 mb-2">
             <div class="dropdown">
                 <button class="btn btn-outline-primary dropdown-toggle w-100 shadow-sm" type="button" data-bs-toggle="dropdown">
                     <i class="fa fa-plus-circle me-1"></i>Report an Item
@@ -101,7 +151,7 @@ session_start();
                 </ul>
             </div>
         </div>
-        <div class="col-md-6 mb-2">
+        <div class="col-md-4 mb-2">
             <div class="dropdown">
                 <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm" type="button" data-bs-toggle="dropdown">
                     <i class="fa fa-list me-1"></i>Select Category
@@ -113,13 +163,26 @@ session_start();
                 </ul>
             </div>
         </div>
+        <div class="col-md-4 mb-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm" type="button" data-bs-toggle="dropdown">
+                   <a href="claimed_items.php" class="btn btn-info">My Claimed Items</a>
+
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <!-- Add claimed items filter if needed -->
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div id="items-container" class="row mt-4 g-4">
-        </div>
+        <!-- Items loaded by JS/AJAX -->
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 <script>
 // Function to load items dynamically
 function loadItems(category) {
@@ -128,11 +191,8 @@ function loadItems(category) {
     if (searchParam) {
         url += "&search=" + encodeURIComponent(searchParam);
     }
-    
-    // Create AJAX request
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
-    
     xhr.onload = function() {
         if (this.status === 200) {
             document.getElementById("items-container").innerHTML = this.responseText;
@@ -140,17 +200,14 @@ function loadItems(category) {
             document.getElementById("items-container").innerHTML = '<div class="alert alert-danger text-center">Error loading items. Please try again later.</div>';
         }
     };
-    
     xhr.onerror = function() {
         document.getElementById("items-container").innerHTML = '<div class="alert alert-danger text-center">Network error. Please check your connection.</div>';
     };
-
     xhr.send();
 }
 
 // By default load all items on page load
 window.onload = function() {
-    // Check if there's a search term, if so, load all items with the search term
     var searchParam = new URLSearchParams(window.location.search).get('search');
     if (searchParam) {
         loadItems('all');

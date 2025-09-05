@@ -2,10 +2,10 @@
 session_start();
 
 // Redirect if not logged in
-/*if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
     exit;
-}*/
+}
 
 $user_id = $_SESSION['user_id'];
 
@@ -160,9 +160,14 @@ $found_result = $found_items->get_result();
                             <strong>Status:</strong>
                             <span class="badge bg-danger"><?php echo htmlspecialchars($item['status']); ?></span>
                         </p>
+                        <!-- Lost items buttons (use lost_id only) -->
                         <div class="d-flex gap-2">
-                            <a href="edit_items.php?id=<?php echo $item['lost_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
-                            <a href="mark_claimed.php?type=lost&id=<?php echo $item['lost_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>
+                            <a href="edit_items.php?type=lost&id=<?php echo (int)$item['lost_id']; ?>" class="btn btn-edit btn-sm">
+                                <i class="fa fa-edit me-1"></i>Edit
+                            </a>
+                            <a href="mark_claimed.php?type=lost&id=<?php echo (int)$item['lost_id']; ?>" class="btn btn-toggle btn-sm">
+                                <i class="fa fa-check me-1"></i>Toggle Claimed
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -185,9 +190,14 @@ $found_result = $found_items->get_result();
                             <strong>Status:</strong>
                             <span class="badge bg-success"><?php echo htmlspecialchars($item['status']); ?></span>
                         </p>
+                        <!-- Found items buttons (use found_id only) -->
                         <div class="d-flex gap-2">
-                            <a href="edit_items.php?id=<?php echo $item['found_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
-                            <a href="mark_claimed.php?type=found&id=<?php echo $item['found_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>
+                            <a href="edit_items.php?type=found&id=<?php echo (int)$item['found_id']; ?>" class="btn btn-edit btn-sm">
+                                <i class="fa fa-edit me-1"></i>Edit
+                            </a>
+                            <a href="mark_claimed.php?type=found&id=<?php echo (int)$item['found_id']; ?>" class="btn btn-toggle btn-sm">
+                                <i class="fa fa-check me-1"></i>Toggle Claimed
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -198,4 +208,3 @@ $found_result = $found_items->get_result();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php

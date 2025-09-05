@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])|| $_SESSION['role'] != 1) {
     header("Location: login.html");
     exit;
 }
@@ -101,6 +101,8 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="d-flex justify-content-center gap-3 mb-4">
                         <a href="adminpanel.php?role=admin" class="btn btn-danger btn-lg px-4">Admin</a>
                         <a href="dashboard1.php?role=user" class="btn btn-success btn-lg px-4">User</a>
+                    
+                   
                     </div>
                     <hr class="bg-primary">
                     <h4 class="mb-3"><i class="fa fa-users me-2"></i>User Session Data</h4>
