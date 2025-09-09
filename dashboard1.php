@@ -165,8 +165,8 @@ $found_result = $found_items->get_result();
                             <a href="edit_items.php?type=lost&id=<?php echo (int)$item['lost_id']; ?>" class="btn btn-edit btn-sm">
                                 <i class="fa fa-edit me-1"></i>Edit
                             </a>
-                            <a href="mark_claimed.php?type=lost&id=<?php echo (int)$item['lost_id']; ?>" class="btn btn-toggle btn-sm">
-                                <i class="fa fa-check me-1"></i>Toggle Claimed
+                           <!-- <a href="mark_claimed.php?type=lost&id=<?php echo (int)$item['lost_id']; ?>" class="btn btn-toggle btn-sm">
+                                <i class="fa fa-check me-1"></i>Toggle Claimed-->
                             </a>
                         </div>
                     </div>
@@ -195,9 +195,9 @@ $found_result = $found_items->get_result();
                             <a href="edit_items.php?type=found&id=<?php echo (int)$item['found_id']; ?>" class="btn btn-edit btn-sm">
                                 <i class="fa fa-edit me-1"></i>Edit
                             </a>
-                            <a href="mark_claimed.php?type=found&id=<?php echo (int)$item['found_id']; ?>" class="btn btn-toggle btn-sm">
+                           <!-- <a href="mark_claimed.php?type=found&id=<?php echo (int)$item['found_id']; ?>" class="btn btn-toggle btn-sm">
                                 <i class="fa fa-check me-1"></i>Toggle Claimed
-                            </a>
+                            </a>-->
                         </div>
                     </div>
                 </div>

@@ -1,15 +1,13 @@
 <?php
 session_start();
 
-// Get user ID from session if needed
-$user_id = $_SESSION['user_id'] ?? null; 
-if (!$user_id) {
-    echo "<script>
-            alert('Please log in first.');
-            window.location.href = 'login.html';
-          </script>";
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.html");
     exit;
 }
+
+
 // Make sure user is logged in
 $phone = $_POST['phone'] ?? '';
 $item_name = $_POST['lost_item'] ?? '';
@@ -18,6 +16,7 @@ $date_lost = $_POST['date_lost'] ?? '';
 $location = $_POST['location'] ?? '';
 $status = "lost"; // default status
 $image_path = null; // default null
+$type="lost";
 
 // ✅ Database connection
 $servername = "localhost";

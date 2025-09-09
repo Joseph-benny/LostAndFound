@@ -164,6 +164,9 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
         <a class="nav-link text-white mx-3" href="home.php">Home</a>
         <a class="nav-link text-white mx-3" href="about.html">About Us</a>
         <li class="nav-item dropdown">
+ 
+
+<li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle position-relative" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
     <i class="fa fa-bell"></i>
     <?php
@@ -174,6 +177,21 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
       }
     ?>
   </a>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <?php
+      $result = $conn->query("SELECT * FROM notifications WHERE user_id=$user_id ORDER BY created_at DESC LIMIT 10");
+      if ($result->num_rows > 0) {
+          while ($n = $result->fetch_assoc()) {
+              echo "<li><span class='dropdown-item'>{$n['message']}<br><small class='text-muted'>{$n['created_at']}</small></span></li>";
+          }
+      } else {
+          echo "<li><span class='dropdown-item text-muted'>No notifications</span></li>";
+      }
+    ?>
+  </ul>
+</li>
+
+
   <ul class="dropdown-menu dropdown-menu-end">
     <?php
       $result = $conn->query("SELECT * FROM notifications WHERE user_id=$user_id ORDER BY created_at DESC LIMIT 5");
@@ -218,7 +236,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
               <p class="card-text"><span class="badge bg-danger"><?php echo htmlspecialchars($lost['status']); ?></span></p>
               <div class="d-flex gap-2">
                 <a href="edit_items.php?id=<?php echo $lost['lost_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
-                <a href="mark_claimed.php?type=lost&id=<?php echo $lost['lost_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>
+               <!-- <a href="mark_claimed.php?type=lost&id=<?php echo $lost['lost_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>-->
               </div>
             </div>
           </div>
@@ -238,7 +256,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
               <p class="card-text"><span class="badge bg-success"><?php echo htmlspecialchars($found['status']); ?></span></p>
               <div class="d-flex gap-2">
                 <a href="edit_items.php?id=<?php echo $found['found_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
-                <a href="mark_claimed.php?type=found&id=<?php echo $found['found_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>
+               <!-- <a href="mark_claimed.php?type=found&id=<?php echo $found['found_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>-->
               </div>
             </div>
           </div>
@@ -267,5 +285,29 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Font Awesome JS (for icons) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$('#notifDropdown').on('click', function() {
+    $.get("get_notifications.php", function(data) {
+        let notifications = JSON.parse(data);
+        let notifList = $("#notifList");
+        notifList.empty();
+
+        if (notifications.length > 0) {
+            notifications.forEach(n => {
+                notifList.append("<li><a class='dropdown-item' href='#'>" + n.message + 
+                    " <br><small class='text-muted'>" + n.created_at + "</small></a></li>");
+            });
+            $("#notifCount").text(notifications.length);
+        } else {
+            notifList.append("<li><span class='dropdown-item text-muted'>No notifications</span></li>");
+            $("#notifCount").text("");
+        }
+    });
+});
+</script>
+
+
 </body>
 </html>

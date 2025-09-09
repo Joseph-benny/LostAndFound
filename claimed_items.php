@@ -21,7 +21,7 @@ $sql = "
            COALESCE(l.item_image, f.item_image) AS item_image,
            COALESCE(l.location, f.location) AS location,
            COALESCE(l.date_lost, f.date_found) AS item_date,
-           u.first_name, u.last_name
+           u.first_name, u.last_name, u.phone
     FROM claims c
     LEFT JOIN lost_items l ON c.lost_id = l.lost_id
     LEFT JOIN found_items f ON c.found_id = f.found_id
@@ -51,6 +51,7 @@ $result = $stmt->get_result();
                 $itemName = htmlspecialchars($row['item_name']);
                 $itemImage = !empty($row['item_image']) ? htmlspecialchars($row['item_image']) : 'images/placeholder.png';
                 $uploaderName = htmlspecialchars($row['first_name'] . " " . $row['last_name']);
+                $uploaderPhone = htmlspecialchars($row['phone']);
                 $claimStatus = htmlspecialchars($row['claim_status']);
                 $claimDate = htmlspecialchars($row['claimed_at']);
                 $claimDesc = htmlspecialchars($row['claim_description']);
@@ -65,8 +66,20 @@ $result = $stmt->get_result();
                             <p><b>Uploader:</b> '.$uploaderName.'</p>
                             <p><b>Description:</b> '.$claimDesc.'</p>
                             <p><b>Date:</b> '.$claimDate.'</p>
-                            <span class="badge bg-'.$badgeColor.'">'.ucfirst($claimStatus).'</span>
-                        </div>
+                            <span class="badge bg-'.$badgeColor.'">'.ucfirst($claimStatus).'</span>';
+
+                // Show Contact button only if claim is approved
+                if ($claimStatus === 'approved') {
+                    // WhatsApp link with country code
+                    $whatsappNumber = "91" . preg_replace('/\D/', '', $uploaderPhone);
+                    echo '<div class="mt-3">
+                            <a href="https://wa.me/'.$whatsappNumber.'" target="_blank" class="btn btn-success btn-sm">
+                                <i class="fa fa-whatsapp me-1"></i>Contact Uploader
+                            </a>
+                          </div>';
+                }
+
+                echo '      </div>
                     </div>
                 </div>';
             }

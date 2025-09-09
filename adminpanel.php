@@ -131,7 +131,7 @@ $result = $conn->query("SELECT * FROM users ORDER BY user_id DESC");
 <div class="container mt-5">
     <h2 class="mb-4">Admin Panel - Manage Users</h2>
     <a href="admin.php" class="btn btn-secondary mb-3">Back</a>
-    <div class="btn btn-secondary mb-3">
+   <div class="dropdown mb-3">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="claimsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
     Manage Claims
   </button>
@@ -180,8 +180,9 @@ $result = $conn->query("SELECT * FROM users ORDER BY user_id DESC");
                            class="btn btn-secondary btn-sm">View items</a>
                     </td>
                 </tr>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+               
             <?php } ?>
+             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
         </tbody>
     </table>

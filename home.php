@@ -98,6 +98,7 @@ session_start();
             background-color: #90caf9;
             color: #162447;
         }
+        
     </style>
 </head>
 <body>
@@ -165,8 +166,8 @@ session_start();
         </div>
         <div class="col-md-4 mb-2">
             <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm" type="button" data-bs-toggle="dropdown">
-                   <a href="claimed_items.php" class="btn btn-info">My Claimed Items</a>
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm1" type="button" >
+                   <a href="claimed_items.php">My Claimed Items</a>
 
                 </button>
                 <ul class="dropdown-menu w-100">
