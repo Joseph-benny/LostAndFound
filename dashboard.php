@@ -12,6 +12,10 @@ $conn = new mysqli("localhost", "root", "", "lostfound");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+// fetch unread notifications for the logged-in user (for initial render)
+$notif_query = $conn->query("SELECT notification_id, message, created_at FROM notifications WHERE user_id = $user_id AND status = 'unread' ORDER BY created_at DESC LIMIT 5");
+$notif_count = $notif_query ? $notif_query->num_rows : 0;
+
 
 // Handle account deletion
 if (isset($_GET['delete']) && $_GET['delete'] == $user_id) {
@@ -166,30 +170,27 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
         <li class="nav-item dropdown">
  
 
+<!-- Font Awesome CDN - Place this inside <head> section -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
 <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle position-relative" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
-    <i class="fa fa-bell"></i>
-    <?php
-      $user_id = $_SESSION['user_id'];
-      $count = $conn->query("SELECT COUNT(*) as c FROM notifications WHERE user_id=$user_id AND status='unread'")->fetch_assoc()['c'];
-      if ($count > 0) {
-          echo "<span class='badge bg-danger position-absolute top-0 start-100 translate-middle'>$count</span>";
-      }
-    ?>
+  <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa fa-bell"></i> Notifications 
+    <span class="badge bg-danger"><?php echo $notif_count; ?></span>
   </a>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <?php
-      $result = $conn->query("SELECT * FROM notifications WHERE user_id=$user_id ORDER BY created_at DESC LIMIT 10");
-      if ($result->num_rows > 0) {
-          while ($n = $result->fetch_assoc()) {
-              echo "<li><span class='dropdown-item'>{$n['message']}<br><small class='text-muted'>{$n['created_at']}</small></span></li>";
-          }
-      } else {
-          echo "<li><span class='dropdown-item text-muted'>No notifications</span></li>";
-      }
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown">
+    <?php 
+    if ($notif_count > 0) {
+        while ($notif = $notif_query->fetch_assoc()) {
+            echo "<li><a class='dropdown-item' href='#'>{$notif['message']}</a></li>";
+        }
+    } else {
+        echo "<li><a class='dropdown-item' href='#'>No new notifications</a></li>";
+    }
     ?>
   </ul>
 </li>
+
 
 
   <ul class="dropdown-menu dropdown-menu-end">
