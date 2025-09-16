@@ -1,7 +1,8 @@
 <?php
 session_start();
+require 'send_mail.php';
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login.html");
     exit;
 }
 
@@ -51,6 +52,26 @@ if (isset($_POST['submit'])) {
         if ($stmt->execute()) {
             // ✅ Item added successfully
             $found_id = $conn->insert_id;
+
+         
+  // ✅ Get user's email and name
+            $user_stmt = $conn->prepare("SELECT email, first_name FROM users WHERE user_id = ?");
+            $user_stmt->bind_param("i", $user_id);
+            $user_stmt->execute();
+            $user_stmt->bind_result($email, $first_name);
+            $user_stmt->fetch();
+            $user_stmt->close();
+
+
+    $subject = "Lost & Found - Item Submitted";
+    $body = "Your reported Found item (Found ID: $found_id) has been submitted successfully.";
+   
+   $sent = sendMail($email, $subject, $body);
+if (!$sent) {
+    error_log("Email failed to send to $email");
+}
+
+
 
             // 🔹 Add personal notification for user
             $message = "Your found item '$item_name' has been successfully reported.";

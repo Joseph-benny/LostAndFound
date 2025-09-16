@@ -1,32 +1,30 @@
 <?php
 session_start();
-
+require 'send_mail.php';
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
     exit;
 }
 
-$user_id = $_SESSION['user_id']; // ✅ You missed this in your original code
+$conn = new mysqli("localhost", "root", "", "lostfound");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-// Get form data
+$user_id = $_SESSION['user_id']; 
 $phone = $_POST['phone'] ?? '';
-$item_name = $_POST['lost_item'] ?? '';
-$description = $_POST['description'] ?? '';
+$item_name = ucfirst(trim($_POST['lost_item']));
+$description = ucfirst(trim($_POST['description']));
 $date_lost = $_POST['date_lost'] ?? '';
-$location = $_POST['location'] ?? '';
+$location = ucfirst(trim($_POST['location']));
 $status = "lost"; // default status
 $image_path = null; // default null
 
-// ✅ Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "lostfound";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// ✅ Validate phone number length
+if (!preg_match("/^\d{10}$/", $phone)) {
+    echo "<script>alert('Phone number must be exactly 10 digits.'); window.history.back();</script>";
+    exit;
 }
 
 // ✅ Handle image upload (optional)
@@ -59,20 +57,35 @@ if (isset($_FILES["item_image"]) && $_FILES["item_image"]["error"] !== 4) {
 // ✅ Insert into lost_items table
 $sql = "INSERT INTO lost_items (user_id, phone, item_name, description, date_lost, location, status, item_image)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("isssssss", $user_id, $phone, $item_name, $description, $date_lost, $location, $status, $image_path);
 
 if ($stmt->execute()) {
 
-    // ✅ Add common notification for all users after successful insert
-    $message = "New items are added, check whether it is yours.";
-    $notif_sql = "INSERT INTO notifications (user_id, message, status, created_at) 
-                  VALUES (0, '$message', 'unread', NOW())"; // user_id=0 means global notification
+    // ✅ Get user's email for sending mail
+    $user_stmt = $conn->prepare("SELECT email FROM users WHERE user_id = ?");
+    $user_stmt->bind_param("i", $user_id);
+    $user_stmt->execute();
+    $user_stmt->bind_result($email);
+    $user_stmt->fetch();
+    $user_stmt->close();
+
+    // ✅ Send email to the logged-in user
+    $subject = "Lost & Found - Item Submitted";
+    $body = "Your reported Lost item has been submitted successfully.";
+    if (!sendMail($email, $subject, $body)) {
+        error_log("Failed to send email to $email");
+    }
+
+    // ✅ Add notification for all users
+    $message = "New lost items are added check whether you have those..";
+    $notif_sql = "INSERT INTO notifications (user_id, message, status, created_at)
+                  SELECT user_id, '$message', 'unread', NOW() FROM users";
     $conn->query($notif_sql);
 
     header("Location: home.php");
     exit;
+
 } else {
     echo "Database Error: " . $stmt->error;
 }

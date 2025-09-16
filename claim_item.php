@@ -103,10 +103,73 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Claim Item</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(120deg, #0d1a2f 70%, #1976d2 100%);
+            min-height: 100vh;
+            color: #e3eafc;
+        }
+        .navbar-custom {
+            background: linear-gradient(90deg, #0d1a2f 80%, #1976d2 100%);
+        }
+        .navbar-brand, .nav-link {
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+            color: #e3eafc !important;
+        }
+        .nav-link {
+            margin-left: 1.5rem !important;
+            margin-right: 1.5rem !important;
+        }
+        .navbar-brand i {
+            color: #90caf9;
+        }
+        .card {
+            background: #162447;
+            color: #e3eafc;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(25, 118, 210, 0.2);
+        }
+        .form-label {
+            color: #90caf9;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #1976d2;
+            color: #fff;
+            font-weight: 500;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #1565c0;
+            color: #fff;
+        }
+        .section-title {
+            color: #90caf9;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        .alert-info {
+            background: #12203a;
+            color: #90caf9;
+            border: none;
+            border-radius: 0.7rem;
+            font-size: 1.1rem;
+        }
+    </style>
+   
 </head>
 <body class="container mt-5">
     <h2>Claim Item</h2>

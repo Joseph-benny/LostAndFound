@@ -12,21 +12,17 @@ $conn = new mysqli("localhost", "root", "", "lostfound");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
 // fetch unread notifications for the logged-in user (for initial render)
 $notif_query = $conn->query("SELECT notification_id, message, created_at FROM notifications WHERE user_id = $user_id AND status = 'unread' ORDER BY created_at DESC LIMIT 5");
 $notif_count = $notif_query ? $notif_query->num_rows : 0;
 
-
-// Handle account deletion
+// Handle account deletion (unchanged)
 if (isset($_GET['delete']) && $_GET['delete'] == $user_id) {
-    // Delete related items first
     $conn->query("DELETE FROM lost_items WHERE user_id = $user_id");
     $conn->query("DELETE FROM found_items WHERE user_id = $user_id");
-
-    // Delete user account
     $conn->query("DELETE FROM users WHERE user_id = $user_id");
 
-    // Destroy session and redirect to homepage
     session_destroy();
     echo "<script>
             alert('Your account and all reported items have been deleted.');
@@ -35,41 +31,10 @@ if (isset($_GET['delete']) && $_GET['delete'] == $user_id) {
     exit;
 }
 
-if ($user_id === 0 && isset($_SESSION['is_admin_email']) && $_SESSION['is_admin_email'] === true) {
-    // Admin acting as user
-    $user = [
-        'first_name' => $_SESSION['first_name'] ?? 'Admin',
-        'last_name'  => '',
-        'email'      => $_SESSION['email'] ?? '',
-        'status'     => 'active'
-    ];
-    $lost_items = $conn->query("SELECT * FROM lost_items WHERE 1=0"); // empty
-    $found_items = $conn->query("SELECT * FROM found_items WHERE 1=0"); // empty
-} else {
-    // Normal user
-    $user_query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
-    $user = $user_query->fetch_assoc();
-
-    if (isset($user['status']) && $user['status'] == 'blocked') {
-        session_destroy();
-        echo "<script>
-            alert('Your account is currently blocked by the admin.');
-            window.location.href = 'login.html';
-        </script>";
-        exit;
-    }
-
-    $lost_items = $conn->query("SELECT * FROM lost_items WHERE user_id = $user_id");
-    $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id");
-}
-
-// Fetch user details
 $user_query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
 $user = $user_query->fetch_assoc();
 
-// Check if the user is blocked
 if (isset($user['status']) && $user['status'] == 'blocked') {
-    // Destroy session and redirect to login with message
     session_destroy();
     echo "<script>
         alert('Your account is currently blocked by the admin.');
@@ -78,15 +43,8 @@ if (isset($user['status']) && $user['status'] == 'blocked') {
     exit;
 }
 
-
-// Fetch user details
-$user_query = $conn->query("SELECT * FROM users WHERE user_id = $user_id");
-$user = $user_query->fetch_assoc();
-
-// Fetch reported lost items
+// Fetch reported lost and found items
 $lost_items = $conn->query("SELECT * FROM lost_items WHERE user_id = $user_id");
-
-// Fetch reported found items
 $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id");
 ?>
 <!DOCTYPE html>
@@ -95,9 +53,7 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>User Dashboard</title>
-  <!-- Bootstrap 5 CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
@@ -105,56 +61,18 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
       min-height: 100vh;
       color: #e3eafc;
     }
-    .navbar-custom {
-      background: linear-gradient(90deg, #0d1a2f 80%, #1976d2 100%);
-    }
-    .card {
-      background: #162447;
-      color: #e3eafc;
-      border: none;
-    }
-    .card-title {
-      color: #90caf9;
-    }
-    .btn-edit {
-      background-color: #1976d2;
-      color: #fff;
-    }
-    .btn-edit:hover {
-      background-color: #1565c0;
-      color: #fff;
-    }
-    .btn-toggle {
-      background-color: #43a047;
-      color: #fff;
-    }
-    .btn-toggle:hover {
-      background-color: #388e3c;
-      color: #fff;
-    }
-    .btn-logout {
-      background-color: #d32f2f;
-      color: #fff;
-    }
-    .btn-logout:hover {
-      background-color: #b71c1c;
-      color: #fff;
-    }
-    .section-title {
-      color: #90caf9;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      letter-spacing: 2px;
-    }
-    .text-mutedtext-center{
-      color:white;
-    }
-    
+    .navbar-custom { background: linear-gradient(90deg, #0d1a2f 80%, #1976d2 100%); }
+    .card { background: #162447; color: #e3eafc; border: none; }
+    .card-title { color: #90caf9; }
+    .btn-edit { background-color: #1976d2; color: #fff; }
+    .btn-edit:hover { background-color: #1565c0; color: #fff; }
+    .btn-logout { background-color: #d32f2f; color: #fff; }
+    .btn-logout:hover { background-color: #b71c1c; color: #fff; }
+    .section-title { color: #90caf9; margin-top: 2rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    .text-mutedtext-center{ color:white; }
   </style>
   <script>
-    function logout() {
-      window.location.href = "logout.php";
-    }
+    function logout() { window.location.href = "logout.php"; }
   </script>
 </head>
 <body>
@@ -168,45 +86,22 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
         <a class="nav-link text-white mx-3" href="home.php">Home</a>
         <a class="nav-link text-white mx-3" href="about.html">About Us</a>
         <li class="nav-item dropdown">
- 
-
-<!-- Font Awesome CDN - Place this inside <head> section -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-<li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="fa fa-bell"></i> Notifications 
-    <span class="badge bg-danger"><?php echo $notif_count; ?></span>
-  </a>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown">
-    <?php 
-    if ($notif_count > 0) {
-        while ($notif = $notif_query->fetch_assoc()) {
-            echo "<li><a class='dropdown-item' href='#'>{$notif['message']}</a></li>";
-        }
-    } else {
-        echo "<li><a class='dropdown-item' href='#'>No new notifications</a></li>";
-    }
-    ?>
-  </ul>
-</li>
-
-
-
-  <ul class="dropdown-menu dropdown-menu-end">
-    <?php
-      $result = $conn->query("SELECT * FROM notifications WHERE user_id=$user_id ORDER BY created_at DESC LIMIT 5");
-      if ($result->num_rows > 0) {
-          while ($n = $result->fetch_assoc()) {
-              echo "<li><a class='dropdown-item' href='mark_read.php?id={$n['notification_id']}'>{$n['message']} <br><small class='text-muted'>{$n['created_at']}</small></a></li>";
-          }
-      } else {
-          echo "<li><span class='dropdown-item text-muted'>No notifications</span></li>";
-      }
-    ?>
-  </ul>
-</li>
-
+          <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-bell"></i> Notifications 
+            <span class="badge bg-danger"><?php echo $notif_count; ?></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown">
+            <?php 
+            if ($notif_count > 0) {
+                while ($notif = $notif_query->fetch_assoc()) {
+                    echo "<li><a class='dropdown-item' href='#'>{$notif['message']}</a></li>";
+                }
+            } else {
+                echo "<li><a class='dropdown-item' href='#'>No new notifications</a></li>";
+            }
+            ?>
+          </ul>
+        </li>
       </div>
     </div>
     <button class="btn btn-logout ms-3" onclick="logout()"><i class="fa fa-sign-out-alt me-1"></i>Logout</button>
@@ -236,8 +131,9 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
               <p class="card-text"><?php echo nl2br(htmlspecialchars($lost['description'])); ?></p>
               <p class="card-text"><span class="badge bg-danger"><?php echo htmlspecialchars($lost['status']); ?></span></p>
               <div class="d-flex gap-2">
-                <a href="edit_items.php?id=<?php echo $lost['lost_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
-               <!-- <a href="mark_claimed.php?type=lost&id=<?php echo $lost['lost_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>-->
+                <a href="edit_items.php?id=<?php echo $lost['lost_id']; ?>&type=lost" class="btn btn-edit btn-sm">
+                  <i class="fa fa-edit me-1"></i>Edit
+                </a>
               </div>
             </div>
           </div>
@@ -256,8 +152,9 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
               <p class="card-text"><?php echo nl2br(htmlspecialchars($found['description'])); ?></p>
               <p class="card-text"><span class="badge bg-success"><?php echo htmlspecialchars($found['status']); ?></span></p>
               <div class="d-flex gap-2">
-                <a href="edit_items.php?id=<?php echo $found['found_id']; ?>" class="btn btn-edit btn-sm"><i class="fa fa-edit me-1"></i>Edit</a>
-               <!-- <a href="mark_claimed.php?type=found&id=<?php echo $found['found_id']; ?>" class="btn btn-toggle btn-sm"><i class="fa fa-check me-1"></i>Toggle Claimed</a>-->
+                <a href="edit_items.php?id=<?php echo $found['found_id']; ?>&type=found" class="btn btn-edit btn-sm">
+                  <i class="fa fa-edit me-1"></i>Edit
+                </a>
               </div>
             </div>
           </div>
@@ -272,21 +169,17 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
     <div class="col text-center">
       <a href="home.php" class="btn btn-primary me-2"><i class="fa fa-eye me-1"></i>View Items</a>
       <a href="contact.html" class="btn btn-outline-secondary"><i class="fa fa-envelope me-1"></i>Contact Us</a><br><br>
-        <a href="dashboard.php?delete=<?= $user['user_id'] ?>" 
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Are you sure you want to delete your account and all reported items?');">
-                           Delete Account
-                        </a>
+      <a href="dashboard.php?delete=<?= $user['user_id'] ?>" 
+         class="btn btn-danger btn-sm"
+         onclick="return confirm('Are you sure you want to delete your account and all reported items?');">
+         Delete Account
+      </a>
     </div>
-  
   </div>
 </div>
 
-<!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Font Awesome JS (for icons) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $('#notifDropdown').on('click', function() {
@@ -308,7 +201,5 @@ $('#notifDropdown').on('click', function() {
     });
 });
 </script>
-
-
 </body>
 </html>
