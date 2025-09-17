@@ -1,9 +1,7 @@
 <?php
 session_start();
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
 
 // Only logged-in users can access
 if (!isset($_SESSION['user_id'])) {
@@ -31,7 +29,6 @@ if ($type === 'lost') {
     exit;
 }
 
-
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $id, $user_id);
 $stmt->execute();
@@ -42,7 +39,6 @@ if (!$item) {
     echo "<script>alert('Item not found or no permission to edit!'); window.location.href='dashboard.php';</script>";
     exit;
 }
-
 
 // Handle form submission separately for lost and found
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -70,3 +66,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Item</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <h2 class="mb-4">Edit <?php echo ucfirst($type); ?> Item</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Item Name</label>
+            <input type="text" name="item_name" class="form-control" value="<?php echo htmlspecialchars($item['item_name']); ?>" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" required><?php echo htmlspecialchars($item['description']); ?></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label"><?php echo $type === 'lost' ? 'Date Lost' : 'Date Found'; ?></label>
+            <input type="date" name="<?php echo $type === 'lost' ? 'date_lost' : 'date_found'; ?>" 
+                   class="form-control" 
+                   value="<?php echo $type === 'lost' ? $item['date_lost'] : $item['date_found']; ?>" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Location</label>
+            <input type="text" name="location" class="form-control" value="<?php echo htmlspecialchars($item['location']); ?>" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Item</button>
+        <a href="dashboard.php" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

@@ -127,7 +127,11 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
         <?php while ($lost = $lost_items->fetch_assoc()): ?>
           <div class="card mb-3 shadow">
             <div class="card-body">
-              <h5 class="card-title"><?php echo htmlspecialchars($lost['item_name']); ?></h5>
+  <?php if (!empty($lost['item_image'])): ?>
+    <img src="<?php echo htmlspecialchars($lost['item_image']); ?>" class="img-fluid mb-2" style="max-height:150px; border-radius:8px;">
+  <?php endif; ?>
+  <h5 class="card-title"><?php echo htmlspecialchars($lost['item_name']); ?></h5>
+
               <p class="card-text"><?php echo nl2br(htmlspecialchars($lost['description'])); ?></p>
               <p class="card-text"><span class="badge bg-danger"><?php echo htmlspecialchars($lost['status']); ?></span></p>
               <div class="d-flex gap-2">
@@ -147,9 +151,15 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
       <?php if ($found_items->num_rows > 0): ?>
         <?php while ($found = $found_items->fetch_assoc()): ?>
           <div class="card mb-3 shadow">
-            <div class="card-body">
-              <h5 class="card-title"><?php echo htmlspecialchars($found['item_name']); ?></h5>
-              <p class="card-text"><?php echo nl2br(htmlspecialchars($found['description'])); ?></p>
+
+          <div class="card-body">
+  <?php if (!empty($found['item_image'])): ?>
+    <img src="<?php echo htmlspecialchars($found['item_image']); ?>" class="img-fluid mb-2" style="max-height:150px; border-radius:8px;">
+  <?php endif; ?>
+  <h5 class="card-title"><?php echo htmlspecialchars($found['item_name']); ?></h5>
+
+
+             <p class="card-text"><?php echo nl2br(htmlspecialchars($found['description'])); ?></p>
               <p class="card-text"><span class="badge bg-success"><?php echo htmlspecialchars($found['status']); ?></span></p>
               <div class="d-flex gap-2">
                 <a href="edit_items.php?id=<?php echo $found['found_id']; ?>&type=found" class="btn btn-edit btn-sm">

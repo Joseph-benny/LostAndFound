@@ -1,6 +1,7 @@
 <?php
 session_start();
-require 'send_mail.php';
+require 'send_mail.php'; // Make sure this file has sendMail() function
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
     exit;
@@ -26,78 +27,111 @@ if (isset($_POST['submit'])) {
         exit;
     }
 
-    // ✅ Handle Image Upload
-    $target_dir = "uploads/";
-    if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0777, true);
-    }
-
-    $image_name = basename($_FILES["item_image"]["name"]);
-    $target_file = $target_dir . time() . "_" . $image_name;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-    // ✅ Check allowed types
+    // ---------- Multiple-image upload + insert + notifications ----------
     $allowed_types = ['jpg','jpeg','png','gif'];
-    if (!in_array($imageFileType, $allowed_types)) {
-        echo "<script>alert('Only JPG, JPEG, PNG & GIF files are allowed.'); window.history.back();</script>";
+    $upload_dir = "uploads/";
+    $uploaded_images = [];
+
+    // ensure upload directory
+    if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
+
+    // at least one image
+    if (empty($_FILES['item_images']['name'][0])) {
+        echo "<script>alert('Please upload at least one image.'); window.history.back();</script>";
         exit;
     }
 
-    if (move_uploaded_file($_FILES["item_image"]["tmp_name"], $target_file)) {
-        // ✅ Insert into database
-        $stmt = $conn->prepare("INSERT INTO found_items (user_id, phone, item_name, description, date_found, location, status, item_image) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssssss", $user_id, $phone, $item_name, $description, $date_found, $location, $status, $target_file);
+    // maximum 4 images
+    if (count($_FILES['item_images']['name']) > 4) {
+        echo "<script>alert('You can upload a maximum of 4 images.'); window.history.back();</script>";
+        exit;
+    }
 
-        if ($stmt->execute()) {
-            // ✅ Item added successfully
-            $found_id = $conn->insert_id;
+    // process each uploaded file
+    foreach ($_FILES['item_images']['name'] as $key => $filename) {
+        $file_tmp = $_FILES['item_images']['tmp_name'][$key];
+        $file_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (!in_array($file_ext, $allowed_types)) {
+            echo "<script>alert('Only JPG, JPEG, PNG & GIF files are allowed.'); window.history.back();</script>";
+            exit;
+        }
 
-         
-  // ✅ Get user's email and name
-            $user_stmt = $conn->prepare("SELECT email, first_name FROM users WHERE user_id = ?");
-            $user_stmt->bind_param("i", $user_id);
-            $user_stmt->execute();
-            $user_stmt->bind_result($email, $first_name);
-            $user_stmt->fetch();
-            $user_stmt->close();
+        $new_name = time() . "_" . uniqid() . "." . $file_ext;
+        $file_path = $upload_dir . $new_name;
 
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            $uploaded_images[] = $file_path;
+        } else {
+            echo "<script>alert('Failed to upload one of the images.'); window.history.back();</script>";
+            exit;
+        }
+    }
 
-    $subject = "Lost & Found - Item Submitted";
-    $body = "Your reported Found item (Found ID: $found_id) has been submitted successfully.";
-   
-   $sent = sendMail($email, $subject, $body);
-if (!$sent) {
-    error_log("Email failed to send to $email");
-}
+    // Insert first image into found_items table
+    $first_image = $uploaded_images[0];
+    $stmt = $conn->prepare("INSERT INTO found_items (user_id, phone, item_name, description, date_found, location, status, item_image) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    if (!$stmt) {
+        error_log("Prepare failed: " . $conn->error);
+        echo "<script>alert('Server error.'); window.history.back();</script>";
+        exit;
+    }
 
+    $stmt->bind_param("isssssss", $user_id, $phone, $item_name, $description, $date_found, $location, $status, $first_image);
 
+    if ($stmt->execute()) {
+        $found_id = $conn->insert_id;
 
-            // 🔹 Add personal notification for user
-            $message = "Your found item '$item_name' has been successfully reported.";
-            $notif_stmt = $conn->prepare("INSERT INTO notifications (user_id, message, status, created_at) VALUES (?, ?, 'unread', NOW())");
-            $notif_stmt->bind_param("is", $user_id, $message);
+        // Insert all images into item_images table
+        $img_stmt = $conn->prepare("INSERT INTO item_images (item_id, item_type, image_path) VALUES (?, 'found', ?)");
+        if ($img_stmt) {
+            foreach ($uploaded_images as $img_path) {
+                $img_stmt->bind_param("is", $found_id, $img_path);
+                $img_stmt->execute();
+            }
+            $img_stmt->close();
+        }
+
+        // Personal notification for uploader
+        $personal_msg = "Your found item '{$item_name}' (Item ID: {$found_id}, User ID: {$user_id}) has been successfully reported.";
+        $notif_stmt = $conn->prepare("INSERT INTO notifications (user_id, message, status, created_at) VALUES (?, ?, 'unread', NOW())");
+        if ($notif_stmt) {
+            $notif_stmt->bind_param("is", $user_id, $personal_msg);
             $notif_stmt->execute();
             $notif_stmt->close();
-
-            // 🔹 Add common notification for all users (global)
-            $global_message = "New items are added, check whether it is yours.";
-                   
-        // Send global notification to all users
-        $users = $conn->query("SELECT user_id FROM users");
-        while ($row = $users->fetch_assoc()) {
-            $uid = $row['user_id'];
-            $conn->query("INSERT INTO notifications (user_id, message, status, created_at) VALUES ($uid, '$global_message', 'unread', NOW())");
-        }
-            echo "<script>alert('Found item reported successfully!'); window.location.href='dashboard.php';</script>";
-        } else {
-            echo "<script>alert('Error reporting item. Try again.'); window.history.back();</script>";
         }
 
-        $stmt->close();
+        // Global notification for all users
+        $global_msg = "New items are added, check whether it is yours.";
+        $global_stmt = $conn->prepare("INSERT INTO notifications (user_id, message, status, created_at) SELECT user_id, ?, 'unread', NOW() FROM users");
+        if ($global_stmt) {
+            $global_stmt->bind_param("s", $global_msg);
+            $global_stmt->execute();
+            $global_stmt->close();
+        }
+
+        // Send mail to uploader if email exists
+        $email_stmt = $conn->prepare("SELECT email FROM users WHERE user_id = ?");
+        if ($email_stmt) {
+            $email_stmt->bind_param("i", $user_id);
+            $email_stmt->execute();
+            $email_stmt->bind_result($email);
+            if ($email_stmt->fetch() && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $subject = "Lost & Found - Item Submitted";
+                $body = "Your reported found item '{$item_name}' has been submitted successfully.\nItem ID: {$found_id}\nUser ID: {$user_id}";
+                sendMail($email, $subject, $body);
+            }
+            $email_stmt->close();
+        }
+
+        // Success redirect
+        echo "<script>alert('Found item reported successfully!'); window.location.href='dashboard.php';</script>";
+        exit;
     } else {
-        echo "<script>alert('Failed to upload image.'); window.history.back();</script>";
+        echo "<script>alert('Error reporting item. Try again.'); window.history.back();</script>";
     }
+
+    $stmt->close();
 }
 
 $conn->close();
