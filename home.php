@@ -147,8 +147,8 @@ session_start();
                     <i class="fa fa-plus-circle me-1"></i>Report an Item
                 </button>
                 <ul class="dropdown-menu w-100">
-                    <li><a class="dropdown-item" href="lost.html"><i class="fa fa-exclamation-circle me-1 text-danger"></i>Report Lost Item</a></li>
-                    <li><a class="dropdown-item" href="found.html"><i class="fa fa-check-circle me-1 text-success"></i>Report Found Item</a></li>
+                    <li><a class="dropdown-item" href="lost.php"><i class="fa fa-exclamation-circle me-1 text-danger"></i>Report Lost Item</a></li>
+                    <li><a class="dropdown-item" href="foundfront.php"><i class="fa fa-check-circle me-1 text-success"></i>Report Found Item</a></li>
                 </ul>
             </div>
         </div>
@@ -166,7 +166,7 @@ session_start();
         </div>
         <div class="col-md-4 mb-2">
             <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm1" type="button" >
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm" type="button" >
                    <a href="claimed_items.php">My Claimed Items</a>
 
                 </button>

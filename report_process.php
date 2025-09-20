@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (!in_array($image_type, $allowed_types)) {
     echo "<script>
         alert('Only JPG, JPEG, PNG & GIF files are allowed.');
-        window.location.href = 'lost.html';
+        window.location.href = 'lost.php';
     </script>";
     exit;
 }

@@ -37,13 +37,93 @@ $result = $stmt->get_result();
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>My Claimed Items</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(120deg, #0d1a2f 70%, #1976d2 100%);
+            min-height: 100vh;
+            color: #e3eafc;
+        }
+        .section-title {
+            color: #90caf9;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        .card {
+            background: #162447;
+            color: #e3eafc;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(25, 118, 210, 0.2);
+        }
+        .card-title {
+            color: #90caf9;
+            font-weight: bold;
+        }
+        .badge {
+            font-size: 1rem;
+            padding: 0.5em 1em;
+            border-radius: 0.7rem;
+        }
+        .btn-success {
+            background-color: #43a047;
+            border: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            border-radius: 8px;
+        }
+        .btn-success:hover {
+            background-color: #388e3c;
+        }
+        .alert-info {
+            background: #12203a;
+            color: #90caf9;
+            border: none;
+            border-radius: 0.7rem;
+            font-size: 1.1rem;
+        }
+        .navbar-custom {
+            background: linear-gradient(90deg, #0d1a2f 80%, #1976d2 100%);
+        }
+        .navbar-brand, .nav-link {
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+            color: #e3eafc !important;
+        }
+        .navbar-brand i {
+            color: #90caf9;
+        }
+    </style>
 </head>
-<body class="container py-4">
-    <h2 class="text-center mb-4">My Claimed Items</h2>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow sticky-top mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="home.php">
+            <i class="fa-solid fa-magnifying-glass-location me-2"></i>Lost & Found
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <div class="navbar-nav">
+                <a class="nav-link" href="home.php">Home</a>
+                <a class="nav-link" href="dashboard.php"><i class="fa-solid fa-circle-user"></i></a>
+                <a class="nav-link" href="logout.php">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <h2 class="section-title"><i class="fa fa-box-open me-2"></i>My Claimed Items</h2>
     <div class="row">
         <?php
         if ($result->num_rows > 0) {
@@ -62,7 +142,7 @@ $result = $stmt->get_result();
                     <div class="card h-100 shadow-lg border-0">
                         <img src="'.$itemImage.'" class="card-img-top" alt="'.$itemName.'" style="height:200px;object-fit:cover;">
                         <div class="card-body text-center">
-                            <h5 class="card-title text-primary">'.$itemName.'</h5>
+                            <h5 class="card-title">'.$itemName.'</h5>
                             <p><b>Uploader:</b> '.$uploaderName.'</p>
                             <p><b>Description:</b> '.$claimDesc.'</p>
                             <p><b>Date:</b> '.$claimDate.'</p>
@@ -88,6 +168,9 @@ $result = $stmt->get_result();
         }
         ?>
     </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 </body>
 </html>
 <?php $conn->close(); ?>

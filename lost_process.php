@@ -38,18 +38,18 @@ if (isset($_FILES["item_image"]) && $_FILES["item_image"]["error"] !== 4) {
 
         $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
         if (!in_array($image_type, $allowed_types)) {
-            echo "<script>alert('Only JPG, JPEG, PNG & GIF files are allowed.'); window.location.href = 'lost.html';</script>";
+            echo "<script>alert('Only JPG, JPEG, PNG & GIF files are allowed.'); window.location.href = 'lost.php';</script>";
             exit;
         }
 
         if (move_uploaded_file($_FILES["item_image"]["tmp_name"], $target_file)) {
             $image_path = $target_file;
         } else {
-            echo "<script>alert('Image upload failed.'); window.location.href = 'lost.html';</script>";
+            echo "<script>alert('Image upload failed.'); window.location.href = 'lost.php';</script>";
             exit;
         }
     } else {
-        echo "<script>alert('File upload error.'); window.location.href = 'lost.html';</script>";
+        echo "<script>alert('File upload error.'); window.location.href = 'lost.php';</script>";
         exit;
     }
 }

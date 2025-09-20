@@ -97,25 +97,25 @@ if (!isset($_SESSION['user_id'])|| $_SESSION['role'] != 1) {
         <div class="col-lg-7">
             <div class="card shadow-lg mt-5 mb-5 p-4">
                 <div class="card-body text-center">
-                    <h1 class="section-title"><i class="fa fa-user-shield me-2"></i>Select Your Current Role</h1>
+                    <h1 class="section-title"><i class="fa fa-user-shield me-2"></i> Your Current Role is</h1>
                     <div class="d-flex justify-content-center gap-3 mb-4">
                         <a href="adminpanel.php?role=admin" class="btn btn-danger btn-lg px-4">Admin</a>
-                        <a href="dashboard1.php?role=user" class="btn btn-success btn-lg px-4">User</a>
+                       <!-- <a href="dashboard1.php?role=user" class="btn btn-success btn-lg px-4">User</a>-->
                     
                    
                     </div>
                     <hr class="bg-primary">
                     <h4 class="mb-3"><i class="fa fa-users me-2"></i>User Session Data</h4>
                     <ul class="list-grouplist-group-flush">
-                        <li class="list-group-item bg-transparent text-start"><strong>User ID:</strong> <?php echo htmlspecialchars($_SESSION['user_id']); ?></li>
+                      <!--  <li class="list-group-item bg-transparent text-start"><strong>User ID:</strong> <?php echo htmlspecialchars($_SESSION['user_id']); ?></li>-->
                         <?php
                         // Optionally show more user session data if available
                         if (isset($_SESSION['email'])) {
                             echo '<li class="list-group-item bg-transparent text-start"><strong>Email:</strong> ' . htmlspecialchars($_SESSION['email']) . '</li>';
                         }
-                        if (isset($_SESSION['role'])) {
-                            echo '<li class="list-group-item bg-transparent text-start"><strong>Role: Admin</strong> ' . htmlspecialchars($_SESSION['role']) . '</li>';
-                        }
+                        //if (isset($_SESSION['role'])) {
+                            //echo '<li class="list-group-item bg-transparent text-start"><strong>Role: Admin</strong> ' . htmlspecialchars($_SESSION['role']) . '</li>';
+                        //}
                         ?>
                     </ul>
                 </div>

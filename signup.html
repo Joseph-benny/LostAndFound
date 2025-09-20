@@ -112,19 +112,23 @@
 </div>
 
 <script>
-  function validateGmail(input) {
+  function validateEmail(input) {
     const emailError = document.getElementById('emailError');
     const value = input.value.trim();
     
-    if (value && !value.endsWith('@gmail.com')) {
+    // Basic email pattern: text@text.text
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (value && !emailPattern.test(value)) {
       emailError.style.display = 'block';
-      input.setCustomValidity('Email must end with @gmail.com');
+      input.setCustomValidity('Enter a valid email address');
     } else {
       emailError.style.display = 'none';
       input.setCustomValidity('');
     }
   }
 </script>
+
 
             <div class="mb-3">
   <label for="phone" class="form-label">Phone Number</label>

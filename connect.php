@@ -158,10 +158,19 @@ $conn->close();
   </ul>
 
 <div class="text-end mt-4">
-  <?php if ($table === 'lost_items'): ?>
-      <a href="claim_item.php?lost_id=<?php echo $item['lost_id']; ?>&table=lost_items" class="btn btn-warning btn-lg">
-        Respond
-      </a>
+ <?php if ($table === 'lost_items'): ?>
+  <?php 
+    // Get uploader phone number
+    $phone = preg_replace('/\D/', '', $item['phone']); // Remove non-digit characters
+    $country_code = '91'; // Change this if your users are in a different country
+    $message = urlencode("Hello, I saw your lost item report for '{$item['item_name']}' on Lost & Found. I would like to respond."); 
+    $whatsapp_link = "https://wa.me/{$country_code}{$phone}?text={$message}";
+  ?>
+  <a href="<?php echo $whatsapp_link; ?>" target="_blank" class="btn btn-success btn-lg">
+    Chat on WhatsApp
+  </a>
+
+
   <?php elseif ($table === 'found_items'): ?>
       <a href="claim_item.php?found_id=<?php echo $item['found_id']; ?>&table=found_items" class="btn btn-warning btn-lg">
         Respond
