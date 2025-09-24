@@ -113,7 +113,7 @@ $found_items = $found_stmt->get_result();
                 <div class="col-md-4">
                     <div class="card mb-3 shadow">
                         <?php if (!empty($item['item_image'])): ?>
-                            <img src="/mini_project/uploads/<?php echo htmlspecialchars($item['item_image']); ?>" 
+                            <img src="uploads/<?php echo htmlspecialchars($item['item_image']); ?>" 
                                  class="card-img-top" alt="Item Image" 
                                  style="height:180px;object-fit:cover;">
                         <?php endif; ?>
@@ -140,7 +140,7 @@ $found_items = $found_stmt->get_result();
                 <div class="col-md-4">
                     <div class="card mb-3 shadow">
                         <?php if (!empty($item['item_image'])): ?>
-                            <img src="htdocs/mini_project/uploads/<?php echo htmlspecialchars($item['item_image']); ?>" 
+                            <img src="uploads/<?php echo htmlspecialchars($item['item_image']); ?>" 
                                  class="card-img-top" alt="Item Image" 
                                  style="height:180px;object-fit:cover;">
                         <?php endif; ?>

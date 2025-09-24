@@ -94,12 +94,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute();
         $stmt->close();
 
+        
+
         echo "<p>Your claim has been submitted for approval.</p>";
 
     } else {
         echo "<p>You have already submitted a claim for this item. Current status: " . htmlspecialchars($existing['claim_status']) . "</p>";
     }
+    
 }
+
 ?>
 
 <!DOCTYPE html>

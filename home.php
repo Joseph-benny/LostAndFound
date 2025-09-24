@@ -98,7 +98,6 @@ session_start();
             background-color: #90caf9;
             color: #162447;
         }
-        
     </style>
 </head>
 <body>
@@ -139,7 +138,6 @@ session_start();
         </div>
     </div>
 
-    <!-- Grouped dropdown buttons row -->
     <div class="row mb-4 g-2">
         <div class="col-md-4 mb-2">
             <div class="dropdown">
@@ -165,15 +163,9 @@ session_start();
             </div>
         </div>
         <div class="col-md-4 mb-2">
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-sm" type="button" >
-                   <a href="claimed_items.php">My Claimed Items</a>
-
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <!-- Add claimed items filter if needed -->
-                </ul>
-            </div>
+            <a href="claimed_items.php" class="btn btn-outline-secondary w-100 shadow-sm">
+                <i class="fa fa-star me-1"></i>My Claimed Items
+            </a>
         </div>
     </div>
 
@@ -185,7 +177,6 @@ session_start();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 <script>
-// Function to load items dynamically
 function loadItems(category) {
     var searchParam = new URLSearchParams(window.location.search).get('search');
     var url = "fetch_items.php?category=" + category;
@@ -206,15 +197,8 @@ function loadItems(category) {
     };
     xhr.send();
 }
-
-// By default load all items on page load
 window.onload = function() {
-    var searchParam = new URLSearchParams(window.location.search).get('search');
-    if (searchParam) {
-        loadItems('all');
-    } else {
-        loadItems('all');
-    }
+    loadItems('all');
 };
 </script>
 </body>

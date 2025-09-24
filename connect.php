@@ -158,25 +158,55 @@ $conn->close();
   </ul>
 
 <div class="text-end mt-4">
- <?php if ($table === 'lost_items'): ?>
   <?php 
     // Get uploader phone number
-    $phone = preg_replace('/\D/', '', $item['phone']); // Remove non-digit characters
-    $country_code = '91'; // Change this if your users are in a different country
-    $message = urlencode("Hello, I saw your lost item report for '{$item['item_name']}' on Lost & Found. I would like to respond."); 
-    $whatsapp_link = "https://wa.me/{$country_code}{$phone}?text={$message}";
+    $phone = isset($item['phone']) ? preg_replace('/\D/', '', $item['phone']) : '';
+    $country_code = '91'; // Change if your users are in a different country
+    $message = "Hello, I saw your item report for '{$item['item_name']}' on Lost & Found. I would like to respond."; 
+    $whatsapp_link = "https://wa.me/{$country_code}{$phone}?text=" . urlencode($message);
+
+    // Share content for Web Share API
+    $currentURL = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    $shareTitle = "Lost & Found Item: {$item['item_name']}";
+    $shareText = "Check out this item on Lost & Found: {$item['item_name']} at {$currentURL}";
   ?>
-  <a href="<?php echo $whatsapp_link; ?>" target="_blank" class="btn btn-success btn-lg">
-    Chat on WhatsApp
-  </a>
 
-
+  <!-- Respond Button -->
+  <?php if ($table === 'lost_items'): ?>
+    <a href="<?php echo $whatsapp_link; ?>" target="_blank" class="btn btn-success btn-lg">
+      Chat on WhatsApp
+    </a>
   <?php elseif ($table === 'found_items'): ?>
-      <a href="claim_item.php?found_id=<?php echo $item['found_id']; ?>&table=found_items" class="btn btn-warning btn-lg">
-        Respond
-      </a>
+    <a href="claim_item.php?found_id=<?php echo $item['found_id']; ?>&table=found_items" class="btn btn-warning btn-lg">
+      Respond
+    </a>
   <?php endif; ?>
+
+  <!-- Universal Share Button -->
+  <button class="btn btn-primary btn-lg ms-2" id="shareButton">
+    <i class="fa fa-share-alt me-1"></i> Share
+  </button>
 </div>
+
+<script>
+document.getElementById('shareButton').addEventListener('click', async () => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "<?php echo $shareTitle; ?>",
+        text: "<?php echo $shareText; ?>",
+        url: "<?php echo $currentURL; ?>"
+      });
+      console.log('Item shared successfully!');
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
+  } else {
+    alert("Sharing not supported in this browser. Copy the link: <?php echo $currentURL; ?>");
+  }
+});
+</script>
+
 
 </div>
 
