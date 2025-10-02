@@ -124,7 +124,7 @@ session_start();
 
 <div class="container">
     <div class="text-center mb-4">
-        <img src="images/David Wojnarowicz.jpeg" class="rounded-circle border border-3 border-primary mb-2" width="90" height="90" alt="Logo">
+        <img src="images/download (8).jpeg" class="rounded-circle border border-3 border-primary mb-2" width="90" height="90" alt="Logo">
         <h1 class="fw-bold section-title">Lost And Found</h1>
         <p class="lead text-secondary">Find your lost items or report what you've found!</p>
     </div>

@@ -121,31 +121,55 @@ $found_items = $conn->query("SELECT * FROM found_items WHERE user_id = $user_id"
   </div>
 
   <div class="row">
-    <div class="col-md-6">
-      <h3 class="section-title text-center">Reported Lost Items</h3>
-      <?php if ($lost_items->num_rows > 0): ?>
-        <?php while ($lost = $lost_items->fetch_assoc()): ?>
-          <div class="card mb-3 shadow">
-            <div class="card-body">
-  <?php if (!empty($lost['item_image'])): ?>
-    <img src="<?php echo htmlspecialchars($lost['item_image']); ?>" class="img-fluid mb-2" style="max-height:150px; border-radius:8px;">
-  <?php endif; ?>
-  <h5 class="card-title"><?php echo htmlspecialchars($lost['item_name']); ?></h5>
+      <div class="col-md-6">
+  <h3 class="section-title text-center">Reported Lost Items</h3>
+  <?php if ($lost_items->num_rows > 0): ?>
+    <?php while ($lost = $lost_items->fetch_assoc()): ?>
+      <div class="card mb-3 shadow">
+        <div class="card-body">
 
-              <p class="card-text"><?php echo nl2br(htmlspecialchars($lost['description'])); ?></p>
-              <p class="card-text"><span class="badge bg-danger"><?php echo htmlspecialchars($lost['status']); ?></span></p>
-              <div class="d-flex gap-2">
-                <a href="edit_items.php?id=<?php echo $lost['lost_id']; ?>&type=lost" class="btn btn-edit btn-sm">
-                  <i class="fa fa-edit me-1"></i>Edit
-                </a>
-              </div>
-            </div>
+          <?php if (!empty($lost['item_image'])): ?>
+            <img src="<?php echo htmlspecialchars($lost['item_image']); ?>" 
+                 class="img-fluid mb-2" 
+                 style="max-height:150px; border-radius:8px;">
+          <?php endif; ?>
+
+          <h5 class="card-title"><?php echo htmlspecialchars($lost['item_name']); ?></h5>
+          <p class="card-text"><?php echo nl2br(htmlspecialchars($lost['description'])); ?></p>
+
+          <!-- Show claim status badge -->
+          <p class="card-text">
+            <span class="badge <?php echo $lost['claim_state'] === 'claimed' ? 'bg-success' : 'bg-danger'; ?>">
+              <?php echo htmlspecialchars($lost['claim_state']); ?>
+            </span>
+          </p>
+
+          <div class="d-flex gap-2">
+            <!-- Edit button -->
+            <a href="edit_items.php?id=<?php echo $lost['lost_id']; ?>&type=lost" 
+               class="btn btn-edit btn-sm">
+              <i class="fa fa-edit me-1"></i>Edit
+            </a>
+
+            <!-- Mark as claimed button (only if unclaimed) -->
+            <?php if ($lost['claim_state'] !== 'claimed'): ?>
+              <form method="post" action="mark_claimed.php" style="display:inline;">
+                <input type="hidden" name="lost_id" value="<?php echo $lost['lost_id']; ?>">
+                <button type="submit" class="btn btn-success btn-sm">
+                  <i class="fa fa-check me-1"></i>Mark as Claimed
+                </button>
+              </form>
+            <?php endif; ?>
           </div>
-        <?php endwhile; ?>
-      <?php else: ?>
-        <p class="text-mutedtext-center">No lost items reported.</p>
-      <?php endif; ?>
-    </div>
+
+        </div>
+      </div>
+    <?php endwhile; ?>
+  <?php else: ?>
+    <p class="text-muted text-center">No lost items reported.</p>
+  <?php endif; ?>
+</div>
+      
     <div class="col-md-6">
       <h3 class="section-title text-center">Reported Found Items</h3>
       <?php if ($found_items->num_rows > 0): ?>

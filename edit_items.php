@@ -70,35 +70,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Item</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Edit Item</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
+      color: #fff;
+      min-height: 100vh;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      background: #1b263b;
+      color: #fff;
+    }
+    .card-header {
+      background: #0d1b2a;
+      border-bottom: 2px solid #415a77;
+    }
+    .form-control, .form-control:focus {
+      background-color: #f8f9fa;
+      color: #000;
+      border-radius: 10px;
+      box-shadow: none;
+    }
+    .btn-primary {
+      background: #0d6efd;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .btn-primary:hover {
+      background: #084298;
+    }
+    .btn-secondary {
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    h2 {
+      font-weight: bold;
+      text-align: center;
+      color: #e0e1dd;
+    }
+  </style>
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-    <h2 class="mb-4">Edit <?php echo ucfirst($type); ?> Item</h2>
-    <form method="POST">
-        <div class="mb-3">
-            <label class="form-label">Item Name</label>
-            <input type="text" name="item_name" class="form-control" value="<?php echo htmlspecialchars($item['item_name']); ?>" required>
+<body>
+  <div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
+    <div class="col-lg-6 col-md-8">
+      <div class="card p-4">
+        <div class="card-header text-center">
+          <h2><i class="fa-solid fa-pen-to-square me-2"></i>Edit <?php echo ucfirst($type); ?> Item</h2>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea name="description" class="form-control" required><?php echo htmlspecialchars($item['description']); ?></textarea>
+        <div class="card-body">
+          <form method="POST">
+            <div class="mb-3">
+              <label class="form-label">Item Name</label>
+              <input type="text" name="item_name" class="form-control" value="<?php echo htmlspecialchars($item['item_name']); ?>" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="4" required><?php echo htmlspecialchars($item['description']); ?></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label"><?php echo $type === 'lost' ? 'Date Lost' : 'Date Found'; ?></label>
+              <input type="date" name="<?php echo $type === 'lost' ? 'date_lost' : 'date_found'; ?>" 
+                     class="form-control" 
+                     value="<?php echo $type === 'lost' ? $item['date_lost'] : $item['date_found']; ?>" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Location</label>
+              <input type="text" name="location" class="form-control" value="<?php echo htmlspecialchars($item['location']); ?>" required>
+            </div>
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary px-4"><i class="fa fa-save me-2"></i>Update</button>
+              <a href="dashboard.php" class="btn btn-secondary px-4"><i class="fa fa-times me-2"></i>Cancel</a>
+            </div>
+          </form>
         </div>
-        <div class="mb-3">
-            <label class="form-label"><?php echo $type === 'lost' ? 'Date Lost' : 'Date Found'; ?></label>
-            <input type="date" name="<?php echo $type === 'lost' ? 'date_lost' : 'date_found'; ?>" 
-                   class="form-control" 
-                   value="<?php echo $type === 'lost' ? $item['date_lost'] : $item['date_found']; ?>" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Location</label>
-            <input type="text" name="location" class="form-control" value="<?php echo htmlspecialchars($item['location']); ?>" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Update Item</button>
-        <a href="dashboard.php" class="btn btn-secondary">Cancel</a>
-    </form>
-</div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

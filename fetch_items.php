@@ -16,35 +16,25 @@ if ($conn->connect_error) {
 $category = isset($_GET['category']) ? $_GET['category'] : 'all';
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-$html = '';
+// Helper function to escape output
+function esc($str) {
+    return htmlspecialchars($str);
+}
 
-// Fetch items with claim check
-function fetch_items($conn, $table, $type, $search) {
-    if ($table == 'found_items') {
-        $sql = "SELECT f.found_id AS item_id, f.item_name, f.item_image, f.user_id AS uploader_id,
-                       c.claim_status, c.user_id AS claimer_id
-                FROM found_items f
-                LEFT JOIN claims c ON f.found_id = c.found_id 
-                   AND c.claim_status = 'approved'";
-    } elseif ($table == 'lost_items') {
-        $sql = "SELECT l.lost_id AS item_id, l.item_name, l.item_image, l.user_id AS uploader_id,
-                       c.claim_status, c.user_id AS claimer_id
-                FROM lost_items l
-                LEFT JOIN claims c ON l.lost_id = c.lost_id 
-                   AND c.claim_status = 'approved'";
-    }
+// Fetch lost items
+function fetch_lost_items($conn, $search = '') {
+    $sql = "SELECT l.lost_id, l.item_name, l.item_image, l.user_id AS uploader_id, l.claim_state
+            FROM lost_items l";
 
-    // Search condition
     if (!empty($search)) {
-        $sql .= ($table == 'lost_items') ? " WHERE l.item_name LIKE ?" : " WHERE f.item_name LIKE ?";
+        $sql .= " WHERE l.item_name LIKE ?";
     }
 
-    // Sorting
-    $sql .= ($table == 'lost_items') ? " ORDER BY l.date_lost DESC" : " ORDER BY f.date_found DESC";
+    $sql .= " ORDER BY l.date_lost DESC";
 
     $stmt = $conn->prepare($sql);
     if (!empty($search)) {
-        $searchTerm = '%' . $search . '%';
+        $searchTerm = "%$search%";
         $stmt->bind_param("s", $searchTerm);
     }
 
@@ -54,88 +44,115 @@ function fetch_items($conn, $table, $type, $search) {
     $output = '';
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $itemName = htmlspecialchars($row['item_name']);
-            $itemImage = !empty($row['item_image']) ? htmlspecialchars($row['item_image']) : 'images/David Wojnarowicz.jpeg';
-            $itemId = htmlspecialchars($row['item_id']);
-            $claimStatus = $row['claim_status'];
+            $itemId = $row['lost_id'];
+            $itemName = esc($row['item_name']);
+            $itemImage = !empty($row['item_image']) ? esc($row['item_image']) : 'images/David Wojnarowicz.jpeg';
+            $claimStatus = $row['claim_state'];
             $uploaderId = $row['uploader_id'];
-            $claimerId = $row['claimer_id'];
 
-            // Default badge (Lost/Found)
-            if ($claimStatus === 'approved') {
-                $badgeColor = "bg-secondary";
-                $badgeText = "Already Claimed";
-            } else {
-                $badgeColor = ($type === 'lost') ? 'bg-danger' : 'bg-success';
-                $badgeText = ($type === 'lost') ? 'Lost' : 'Found';
-            }
-
-            $tableParam = ($type === 'lost') ? 'lost_items' : 'found_items';
-
-           
-            // CASE 1: Not claimed → redirect to connect.php
-            if($claimStatus !== 'approved') {
-                $output .= '
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-lg border-0" onclick="window.location.href=\'connect.php?id='.$itemId.'&table='.$tableParam.'\'" style="cursor:pointer;">
-                        <img src="'.$itemImage.'" class="card-img-top" alt="'.$itemName.'" style="height:180px;object-fit:cover;">
-                        <div class="card-body text-center">
-                            <h5 class="card-title text-primary">'.$itemName.'</h5>
-                            <span class="badge '.$badgeColor.'">'.$badgeText.'</span>
-                        </div>
-                    </div>
-                </div>';
-            }
-
-             // CASE 2: Already claimed → no click, show uploader & claimer names
-            else  {
-                // Fetch uploader and claimer names
+            // Badge and clickable logic
+            if ($claimStatus === 'claimed') {
+                // Fetch uploader name
                 $uploaderName = "Unknown";
-                $claimerName = "Unknown";
-
                 if (!empty($uploaderId)) {
-                    $uploaderRes = $conn->query("SELECT CONCAT(first_name,' ',last_name) AS fullname FROM users WHERE user_id = " . intval($uploaderId));
-                    if ($uploaderRes && $uploaderRes->num_rows > 0) {
-                        $uploaderName = $uploaderRes->fetch_assoc()['fullname'];
-                    }
-                }
-
-                if (!empty($claimerId)) {
-                    $claimerRes = $conn->query("SELECT CONCAT(first_name,' ',last_name) AS fullname FROM users WHERE user_id = " . intval($claimerId));
-                    if ($claimerRes && $claimerRes->num_rows > 0) {
-                        $claimerName = $claimerRes->fetch_assoc()['fullname'];
+                    $res = $conn->query("SELECT CONCAT(first_name,' ',last_name) AS fullname FROM users WHERE user_id=".intval($uploaderId));
+                    if ($res && $res->num_rows > 0) {
+                        $uploaderName = $res->fetch_assoc()['fullname'];
                     }
                 }
 
                 $output .= '
                 <div class="col-md-4">
                     <div class="card h-100 shadow-lg border-0">
-                        <img src="'.$itemImage.'" class="card-img-top" alt="'.$itemName.'" style="height:180px;object-fit:cover;">
+                        <img src="'.$itemImage.'" class="card-img-top" style="height:180px; object-fit:cover;" alt="'.$itemName.'">
                         <div class="card-body text-center">
                             <h5 class="card-title text-primary">'.$itemName.'</h5>
-                            <span class="badge bg-secondary">'.$badgeText.'</span>
+                            <span class="badge bg-secondary">Item Claimed</span>
                             <p class="mt-2 mb-0"><strong>Uploader:</strong> '.$uploaderName.'</p>
-                            <p class="mb-0"><strong>Claimer:</strong> '.$claimerName.'</p>
                         </div>
                     </div>
                 </div>';
-            } 
+            } else {
+                // Not claimed → clickable
+                $output .= '
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-lg border-0" onclick="window.location.href=\'connect.php?id='.$itemId.'&table=lost_items\'" style="cursor:pointer;">
+                        <img src="'.$itemImage.'" class="card-img-top" style="height:180px; object-fit:cover;" alt="'.$itemName.'">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-primary">'.$itemName.'</h5>
+                            <span class="badge bg-danger">Lost</span>
+                        </div>
+                    </div>
+                </div>';
+            }
         }
+    } else {
+        $output .= '<div class="alert alert-info text-center mt-3">No lost items found.</div>';
     }
     return $output;
 }
 
-// Logic to determine which items to fetch
+// Fetch found items
+function fetch_found_items($conn, $search = '') {
+    $sql = "SELECT f.found_id, f.item_name, f.item_image, f.user_id AS uploader_id, f.status
+            FROM found_items f";
+
+    if (!empty($search)) {
+        $sql .= " WHERE f.item_name LIKE ?";
+    }
+
+    $sql .= " ORDER BY f.date_found DESC";
+
+    $stmt = $conn->prepare($sql);
+    if (!empty($search)) {
+        $searchTerm = "%$search%";
+        $stmt->bind_param("s", $searchTerm);
+    }
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $output = '';
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $itemId = $row['found_id'];
+            $itemName = esc($row['item_name']);
+            $itemImage = !empty($row['item_image']) ? esc($row['item_image']) : 'images/David Wojnarowicz.jpeg';
+            $status = $row['status'];
+
+            // Badge color
+            $badgeColor = 'bg-secondary';
+            if ($status === 'pending') $badgeColor = 'bg-warning';
+            elseif ($status === 'approved') $badgeColor = 'bg-success';
+            elseif ($status === 'rejected') $badgeColor = 'bg-danger';
+
+            $output .= '
+            <div class="col-md-4">
+                <div class="card h-100 shadow-lg border-0" onclick="window.location.href=\'connect.php?id='.$itemId.'&table=found_items\'" style="cursor:pointer;">
+                    <img src="'.$itemImage.'" class="card-img-top" style="height:180px; object-fit:cover;" alt="'.$itemName.'">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-primary">'.$itemName.'</h5>
+                        <span class="badge '.$badgeColor.'">'.esc(ucfirst($status)).'</span>
+                    </div>
+                </div>
+            </div>';
+        }
+    } else {
+        $output .= '<div class="alert alert-info text-center mt-3">No found items found.</div>';
+    }
+    return $output;
+}
+
+// Main output logic
+$html = '';
 if ($category === 'all' || $category === 'found') {
     $html .= '<h2 class="section-title text-center mt-5">Found Items</h2>';
-    $foundHtml = fetch_items($conn, 'found_items', 'found', $search);
-    $html .= !empty($foundHtml) ? $foundHtml : '<div class="alert alert-info text-center mt-3">No found items found.</div>';
+    $html .= fetch_found_items($conn, $search);
 }
 
 if ($category === 'all' || $category === 'lost') {
     $html .= '<h2 class="section-title text-center">Lost Items</h2>';
-    $lostHtml = fetch_items($conn, 'lost_items', 'lost', $search);
-    $html .= !empty($lostHtml) ? $lostHtml : '<div class="alert alert-info text-center mt-3">No lost items found.</div>';
+    $html .= fetch_lost_items($conn, $search);
 }
 
 $conn->close();
